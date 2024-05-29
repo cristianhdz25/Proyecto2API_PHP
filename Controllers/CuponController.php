@@ -4,7 +4,8 @@ require_once 'Business/CuponBusiness.php';
 require_once 'Entities/Cupon.php';
 
 
-class CuponController {
+class CuponController
+{
 
     private $cuponBusiness;
 
@@ -13,32 +14,39 @@ class CuponController {
         $this->cuponBusiness = new CuponBusiness();
     }
 
-    public function obtenerCupones() {
+    public function obtenerCupones()
+    {
         return $this->cuponBusiness->obtenerCupones();
     }
 
-    public function obtenerCuponesActivos() {
+    public function obtenerCuponesActivos()
+    {
         return $this->cuponBusiness->obtenerCuponesActivos();
     }
-    public function obtenerCuponPorEmpresa($idEmpresa) {
+    public function obtenerCuponPorEmpresa($idEmpresa)
+    {
         return $this->cuponBusiness->obtenerCuponPorEmpresa($idEmpresa);
     }
 
-    public function registrarCupon($id, $nombre, $imgUrl , $ubicacion , $precioBase, $activo , $categoria , $empresa , $promocion) {
-        $cupon = new Cupon($id, $nombre, $imgUrl , $ubicacion , $precioBase, $activo , $categoria , $empresa , $promocion );
+    public function registrarCupon( $nombre, $imgUrl, $ubicacion, $precioBase, $activo, $categoria, $empresa)
+    {
+        $cupon = new Cupon(null, $nombre, $imgUrl, $ubicacion, $precioBase, $activo, $categoria, $empresa);
         return $this->cuponBusiness->registrarCupon($cupon);
     }
 
-    public function obtenerCuponPorId($id) {
+    public function obtenerCuponPorId($id)
+    {
         return $this->cuponBusiness->obtenerCuponPorId($id);
     }
 
-    public function actualizarCupon($id, $nombre, $imgUrl , $ubicacion , $precioBase, $activo , $categoria , $empresa , $promocion) {
-        $cupon = new Cupon($id, $nombre, $imgUrl , $ubicacion , $precioBase, $activo , $categoria , $empresa , $promocion );
+    public function actualizarCupon($id, $nombre, $imgUrl, $ubicacion, $precioBase, $activo, $categoria, $empresa)
+    {
+        $cupon = new Cupon($id, $nombre, $imgUrl, $ubicacion, $precioBase, $activo, $categoria, $empresa);
         return $this->cuponBusiness->actualizarCupon($cupon);
     }
 
-    public function eliminarCupon($id) {
+    public function eliminarCupon($id)
+    {
         return $this->cuponBusiness->eliminarCupon($id);
     }
 

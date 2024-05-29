@@ -42,8 +42,7 @@ class CuponData
         $activo = $cupon->getActivo();
         $id_Categoria = $cupon->getCategoria();
         $id_Empresa	= $cupon->getEmpresa();
-        $id_Promocion = $cupon->getPromocion();
-        $query = "insert into cupon(nombre, imgUrl, ubicacion, precioBase, activo, categoria, empresa, promocion) values ('$nombre', '$imgUrl', '$ubicacion', '$precioBase', '$activo', '$id_Categoria', '$id_Empresa', '$id_Promocion')";
+        $query = "insert into cupon(nombre, imgUrl, ubicacion, precioBase, activo, id_Categoria, id_Empresa) values ('$nombre', '$imgUrl', '$ubicacion', '$precioBase', '$activo', '$id_Categoria', '$id_Empresa')";
         $queryAutoIncrement = "select MAX(id) as id from cupon";
         $resultado = metodoPost($query, $queryAutoIncrement);
         return $resultado;

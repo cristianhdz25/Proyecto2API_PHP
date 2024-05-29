@@ -59,6 +59,45 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         header("HTTP/1.1 200 OK");
         exit();
     }
+
+    if ($endpoint == 'cupones' && isset($_GET['activos'])) {
+        require_once 'Controllers/CuponController.php';
+        $cuponController = new CuponController();
+        $cupones = $cuponController->obtenerCuponesActivos();
+        echo json_encode($cupones);
+        header("HTTP/1.1 200 OK");
+        exit();
+    }
+
+    if($endpoint == 'categorias'){
+        require_once 'Controllers/CategoriaController.php';
+        $categoriaController = new CategoriaController();
+        $categorias = $categoriaController->obtenerCategorias();
+        echo json_encode($categorias);
+        header("HTTP/1.1 200 OK");
+        exit();
+    }
+
+    if($endpoint == 'categorias' && isset($_GET['id'])){
+        require_once 'Controllers/CategoriaController.php';
+        $id = $_GET['id'];
+        $categoriaController = new CategoriaController();
+        $categoria = $categoriaController->obtenerCategoriaPorId($id);
+        echo json_encode($categoria);
+        header("HTTP/1.1 200 OK");
+        exit();
+    }
+
+    if($endpoint == 'promociones'){
+        require_once 'Controllers/PromocionController.php';
+        $promocionController = new PromocionController();
+        $promociones = $promocionController->obtenerPromociones();
+        echo json_encode($promociones);
+        header("HTTP/1.1 200 OK");
+        exit();
+    }
+
+
 }
 
 if ($_POST['METHOD'] == 'POST') {
@@ -79,6 +118,23 @@ if ($_POST['METHOD'] == 'POST') {
         header("HTTP/1.1 200 OK");
         exit();
     }
+
+    if ($endpoint == 'cupones') {
+        require_once 'Controllers/CuponController.php';
+        $nombre = $_POST['nombre'];
+        $imgUrl = $_POST['imgUrl'];
+        $ubicacion = $_POST['ubicacion'];
+        $precioBase = $_POST['precioBase'];
+        $activo = $_POST['activo'];
+        $categoria = $_POST['categoria'];
+        $empresa = $_POST['empresa'];
+        $cuponController = new CuponController();
+        $resultado = $cuponController->registrarCupon($nombre, $imgUrl, $ubicacion, $precioBase, $activo, $categoria, $empresa);
+        echo json_encode($resultado);
+        header("HTTP/1.1 200 OK");
+        exit();
+    }
+    
 }
 
 if($_POST['METHOD'] =='PUT'){

@@ -8,10 +8,10 @@ class Cupon {
     private $activo;
     private $categoria;
     private $empresa;
-    private $promocion;
 
     // Constructor
-    public function __construct($id, $nombre, $imgUrl , $ubicacion , $precioBase, $activo , $categoria , $empresa , $promocion ) {
+
+    public function __construct($id, $nombre, $imgUrl , $ubicacion , $precioBase, $activo , $categoria , $empresa  ) {
         $this->id = $id;
         $this->nombre = $nombre;
         $this->imgUrl = $imgUrl;
@@ -20,8 +20,11 @@ class Cupon {
         $this->activo = $activo;
         $this->categoria = $categoria;
         $this->empresa = $empresa;
-        $this->promocion = $promocion;
     }
+
+
+
+    
 
     // Getters and Setters
     public function getId() {
@@ -88,14 +91,6 @@ class Cupon {
         $this->empresa = $empresa;
     }
 
-    public function getPromocion() {
-        return $this->promocion;
-    }
-
-    public function setPromocion($promocion) {
-        $this->promocion = $promocion;
-    }
-    
 }
 
 
