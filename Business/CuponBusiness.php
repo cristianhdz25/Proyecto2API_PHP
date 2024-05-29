@@ -36,13 +36,10 @@ class CuponBusiness
         return $this->cuponData->obtenerCuponPorId($id);
     }
 
-    public function actualizarCupon($cupon)
+    public function actualizarCupon($id, $activo)
     {
-        return $this->cuponData->actualizarCupon($cupon);
+        return $this->cuponData->actualizarCupon($id, $activo);
     }
 
-    public function eliminarCupon($id)
-    {
-        return $this->cuponData->eliminarCupon($id);
-    }
+
 }

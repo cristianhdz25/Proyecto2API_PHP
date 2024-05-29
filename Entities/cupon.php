@@ -22,6 +22,8 @@ class Cupon {
         $this->empresa = $empresa;
     }
 
+    
+
 
 
     

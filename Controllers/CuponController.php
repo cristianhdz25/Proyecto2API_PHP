@@ -39,16 +39,13 @@ class CuponController
         return $this->cuponBusiness->obtenerCuponPorId($id);
     }
 
-    public function actualizarCupon($id, $nombre, $imgUrl, $ubicacion, $precioBase, $activo, $categoria, $empresa)
+    public function actualizarCupon($id, $activo)
     {
-        $cupon = new Cupon($id, $nombre, $imgUrl, $ubicacion, $precioBase, $activo, $categoria, $empresa);
-        return $this->cuponBusiness->actualizarCupon($cupon);
+       
+        return $this->cuponBusiness->actualizarCupon($id, $activo);
     }
 
-    public function eliminarCupon($id)
-    {
-        return $this->cuponBusiness->eliminarCupon($id);
-    }
+
 
 
 }

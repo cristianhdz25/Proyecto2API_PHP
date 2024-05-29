@@ -28,7 +28,7 @@ class CuponData
 
     function obtenerCuponPorEmpresa($id)
     {
-        $query = "select * from cupon where empresa='$id'";
+        $query = "select * from cupon where id_Empresa='$id'";
         $resultado = metodoGet($query);
         return $resultado->fetchAll();
     }
@@ -45,6 +45,13 @@ class CuponData
         $query = "insert into cupon(nombre, imgUrl, ubicacion, precioBase, activo, id_Categoria, id_Empresa) values ('$nombre', '$imgUrl', '$ubicacion', '$precioBase', '$activo', '$id_Categoria', '$id_Empresa')";
         $queryAutoIncrement = "select MAX(id) as id from cupon";
         $resultado = metodoPost($query, $queryAutoIncrement);
+        return $resultado;
+    }
+
+    function actualizarCupon($id, $activo)
+    {
+        $query = "update cupon set activo='$activo' where id='$id'";
+        $resultado = metodoPut($query);
         return $resultado;
     }
 
