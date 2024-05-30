@@ -1,6 +1,6 @@
 <?php 
 
-require_once 'DataAccess/categoriaData.php';
+require_once 'Data/CategoriaData.php';
 
 class CategoriaBusiness
 {

@@ -28,6 +28,11 @@ class CuponController
         return $this->cuponBusiness->obtenerCuponPorEmpresa($idEmpresa);
     }
 
+    public function obtenerCuponPorCategoria($idCategoria)
+    {
+        return $this->cuponBusiness->obtenerCuponPorCategoria($idCategoria);
+    }
+
     public function registrarCupon( $nombre, $imgUrl, $ubicacion, $precioBase, $activo, $categoria, $empresa)
     {
         $cupon = new Cupon(null, $nombre, $imgUrl, $ubicacion, $precioBase, $activo, $categoria, $empresa);

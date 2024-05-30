@@ -1,6 +1,6 @@
 <?php
 
-require_once 'conexion.php';
+require_once 'Conexion.php';
 
 class CuponData
 {
@@ -29,6 +29,13 @@ class CuponData
     function obtenerCuponPorEmpresa($id)
     {
         $query = "select * from cupon where id_Empresa='$id'";
+        $resultado = metodoGet($query);
+        return $resultado->fetchAll();
+    }
+
+    function obtenerCuponPorCategoria($id)
+    {
+        $query = "select * from cupon where id_Categoria='$id'";
         $resultado = metodoGet($query);
         return $resultado->fetchAll();
     }

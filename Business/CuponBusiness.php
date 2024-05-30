@@ -1,6 +1,6 @@
 <?php 
 
-require_once 'DataAccess/cuponData.php';
+require_once 'Data/CuponData.php';
 
 class CuponBusiness
 {
@@ -24,6 +24,11 @@ class CuponBusiness
     public function obtenerCuponPorEmpresa($idEmpresa)
     {
         return $this->cuponData->obtenerCuponPorEmpresa($idEmpresa);
+    }
+
+    public function obtenerCuponPorCategoria($idCategoria)
+    {
+        return $this->cuponData->obtenerCuponPorCategoria($idCategoria);
     }
 
     public function registrarCupon($cupon)

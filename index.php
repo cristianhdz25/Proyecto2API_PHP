@@ -56,15 +56,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         echo json_encode($cupones);
         header("HTTP/1.1 200 OK");
         exit();
-    } else {
-        if ($endpoint == 'cupones') {
-            require_once 'Controllers/CuponController.php';
-            $cuponController = new CuponController();
-            $cupones = $cuponController->obtenerCupones();
-            echo json_encode($cupones);
-            header("HTTP/1.1 200 OK");
-            exit();
-        }
+    } else if ($endpoint == 'cupones' && isset($_GET['idCategoria'])) {
+        require_once 'Controllers/CuponController.php';
+        $idCategoria = $_GET['idCategoria'];
+        $cuponController = new CuponController();
+        $cupon = $cuponController->obtenerCuponPorCategoria($idCategoria);
+        echo json_encode($cupon);
+        header("HTTP/1.1 200 OK");
+        exit();
+    } else if ($endpoint == 'cupones') {
+        require_once 'Controllers/CuponController.php';
+        $cuponController = new CuponController();
+        $cupones = $cuponController->obtenerCupones();
+        echo json_encode($cupones);
+        header("HTTP/1.1 200 OK");
+        exit();
     }
 
 
@@ -86,17 +92,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     }
 
 
+    if ($endpoint == 'promociones' && isset($_GET['idCupon']) && isset($_GET['page'])) {
+        require_once 'Controllers/PromocionController.php';
+        $idCupon = $_GET['idCupon'];
+        $page = $_GET['page'];
+        $promocionController = new PromocionController();
+        $promocion = $promocionController->obtenerPromocionesPorCupon($idCupon, $page);
+        echo json_encode($promocion);
+        header("HTTP/1.1 200 OK");
+        exit();
+    } else
 
-    // if ($endpoint == 'promociones') {
-    //     require_once 'Controllers/PromocionController.php';
-    //     $promocionController = new PromocionController();
-    //     $promociones = $promocionController->obtenerPromociones();
-    //     echo json_encode($promociones);
-    //     header("HTTP/1.1 200 OK");
-    //     exit();
-    // }
+        if ($endpoint == 'promociones' && isset($_GET['idCupon'])) {
+            require_once 'Controllers/PromocionController.php';
+            $idCupon = $_GET['idCupon'];
+            $promocionController = new PromocionController();
+            $promocion = $promocionController->obtenerTotalPaginasPromocionesPorCupon($idCupon);
+            echo json_encode($promocion);
+            header("HTTP/1.1 200 OK");
+            exit();
+        } else
 
-
+            if ($endpoint == 'promociones') {
+                require_once 'Controllers/PromocionController.php';
+                $promocionController = new PromocionController();
+                $promociones = $promocionController->obtenerPromociones();
+                echo json_encode($promociones);
+                header("HTTP/1.1 200 OK");
+                exit();
+            }
 }
 
 if ($_POST['METHOD'] == 'POST') {
@@ -134,6 +158,19 @@ if ($_POST['METHOD'] == 'POST') {
         exit();
     }
 
+    if ($endpoint == 'promociones') {
+        require_once 'Controllers/PromocionController.php';
+        $nombre = $_POST['nombre'];
+        $porcentaje = $_POST['porcentaje'];
+        $fechaInicio = $_POST['fechaInicio'];
+        $fechaVencimiento = $_POST['fechaVencimiento'];
+        $idCupon = $_POST['idCupon'];
+        $promocionController = new PromocionController();
+        $resultado = $promocionController->registrarPromocion($nombre, $porcentaje, $fechaInicio, $fechaVencimiento, $idCupon);
+        echo json_encode($resultado);
+        header("HTTP/1.1 200 OK");
+        exit();
+    }
 }
 
 if ($_POST['METHOD'] == 'PUT') {
@@ -162,6 +199,17 @@ if ($_POST['METHOD'] == 'PUT') {
         $id = $_GET['id'];
         $activo = $_POST['activo'];
         $resultado = $cuponController->actualizarCupon($id, $activo);
+        echo json_encode($resultado);
+        header("HTTP/1.1 200 OK");
+        exit();
+    }
+
+    if ($endpoint == 'promociones') {
+        require_once 'Controllers/PromocionController.php';
+        $promocionController = new PromocionController();
+        $id = $_GET['id'];
+        $activo = $_POST['activo'];
+        $resultado = $promocionController->actualizarPromocion($id, $activo);
         echo json_encode($resultado);
         header("HTTP/1.1 200 OK");
         exit();
