@@ -87,14 +87,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
 
 
-    if ($endpoint == 'promociones') {
-        require_once 'Controllers/PromocionController.php';
-        $promocionController = new PromocionController();
-        $promociones = $promocionController->obtenerPromociones();
-        echo json_encode($promociones);
-        header("HTTP/1.1 200 OK");
-        exit();
-    }
+    // if ($endpoint == 'promociones') {
+    //     require_once 'Controllers/PromocionController.php';
+    //     $promocionController = new PromocionController();
+    //     $promociones = $promocionController->obtenerPromociones();
+    //     echo json_encode($promociones);
+    //     header("HTTP/1.1 200 OK");
+    //     exit();
+    // }
 
 
 }
