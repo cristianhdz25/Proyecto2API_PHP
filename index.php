@@ -4,6 +4,8 @@ header("Access-Control-Allow-Origin: http://localhost:3000");
 header("Access-Control-Allow-Methods: GET,POST,PUT, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
 
+date_default_timezone_set('America/Costa_Rica');
+
 $endpoint = $_GET['endpoint'] ?? '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
@@ -20,18 +22,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     } else if ($endpoint == 'empresas') {
         require_once 'Controllers/EmpresaController.php';
         $empresaController = new EmpresaController();
-        if (isset($_GET['id'])) {
-            $id = $_GET['id'];
-            $empresa = $empresaController->obtenerEmpresaPorId($id);
-        } else {
-            $empresas = $empresaController->obtenerEmpresas();
-        }
+        $empresas = $empresaController->obtenerEmpresas();
         echo json_encode($empresas);
         header("HTTP/1.1 200 OK");
         exit();
     }
-
-
 
     if ($endpoint == 'cupones' && isset($_GET['id'])) {
         require_once 'Controllers/CuponController.php';
@@ -41,11 +36,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         echo json_encode($cupon);
         header("HTTP/1.1 200 OK");
         exit();
+    } else if ($endpoint == 'cupones' && isset($_GET['idEmpresa']) && isset($_GET['page'])) {
+        require_once 'Controllers/CuponController.php';
+        $idEmpresa = $_GET['idEmpresa'];
+        $page = $_GET['page'];
+        $cuponController = new CuponController();
+        $cupon = $cuponController->obtenerCuponPorEmpresa($idEmpresa, $page);
+        echo json_encode($cupon);
+        header("HTTP/1.1 200 OK");
+        exit();
     } else if ($endpoint == 'cupones' && isset($_GET['idEmpresa'])) {
         require_once 'Controllers/CuponController.php';
         $idEmpresa = $_GET['idEmpresa'];
         $cuponController = new CuponController();
-        $cupon = $cuponController->obtenerCuponPorEmpresa($idEmpresa);
+        $cupon = $cuponController->obtenerTotalPaginasCuponesPorEmpresa($idEmpresa);
         echo json_encode($cupon);
         header("HTTP/1.1 200 OK");
         exit();
@@ -148,11 +152,15 @@ if ($_POST['METHOD'] == 'POST') {
         $imgUrl = $_POST['imgUrl'];
         $ubicacion = $_POST['ubicacion'];
         $precioBase = $_POST['precioBase'];
-        $activo = $_POST['activo'];
-        $categoria = $_POST['categoria'];
-        $empresa = $_POST['empresa'];
+        $fechaCreacion = sumarUnDia($_POST['fechaCreacion']);
+        $fechaInicio = sumarUnDia($_POST['fechaInicio']);
+        $fechaVencimiento = sumarUnDia($_POST['fechaVencimiento']);
+        $descripcion = $_POST['descripcion'];
+        $porcentaje = $_POST['porcentaje'];
+        $id_Categoria = $_POST['id_Categoria'];
+        $id_Empresa = $_POST['id_Empresa'];
         $cuponController = new CuponController();
-        $resultado = $cuponController->registrarCupon($nombre, $imgUrl, $ubicacion, $precioBase, $activo, $categoria, $empresa);
+        $resultado = $cuponController->registrarCupon($nombre, $imgUrl, $ubicacion, $precioBase, $fechaCreacion, $fechaInicio, $fechaVencimiento, $descripcion, $porcentaje, $id_Categoria, $id_Empresa);
         echo json_encode($resultado);
         header("HTTP/1.1 200 OK");
         exit();
@@ -162,8 +170,8 @@ if ($_POST['METHOD'] == 'POST') {
         require_once 'Controllers/PromocionController.php';
         $nombre = $_POST['nombre'];
         $porcentaje = $_POST['porcentaje'];
-        $fechaInicio = $_POST['fechaInicio'];
-        $fechaVencimiento = $_POST['fechaVencimiento'];
+        $fechaInicio = sumarUnDia($_POST['fechaInicio']);
+        $fechaVencimiento = sumarUnDia($_POST['fechaVencimiento']);
         $idCupon = $_POST['idCupon'];
         $promocionController = new PromocionController();
         $resultado = $promocionController->registrarPromocion($nombre, $porcentaje, $fechaInicio, $fechaVencimiento, $idCupon);
@@ -221,5 +229,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
+function sumarUnDia($fecha)
+{
+    // Crear un objeto DateTime con la fecha proporcionada
+    $fechaObj = new DateTime($fecha);
+
+    // Sumar un día
+    $fechaObj->modify('+1 day');
+
+    // Obtener la fecha resultante en el formato deseado (por ejemplo, YYYY-MM-DD)
+    return $fechaObj->format('Y-m-d');
+}
 
 header("HTTP/1.1 400 Bad Request");

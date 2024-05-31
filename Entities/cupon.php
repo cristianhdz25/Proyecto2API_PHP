@@ -1,98 +1,146 @@
 <?php
 class Cupon {
-    private $id;
+    private $id_Cupon;
     private $nombre;
     private $imgUrl;
     private $ubicacion;
     private $precioBase;
+    private $fechaCreacion;
+    private $fechaInicio;
+    private $fechaVencimiento;
+    private $descripcion;
+    private $porcentaje;
     private $activo;
-    private $categoria;
-    private $empresa;
+    private $id_Categoria;
+    private $id_Empresa;
 
     // Constructor
-
-    public function __construct($id, $nombre, $imgUrl , $ubicacion , $precioBase, $activo , $categoria , $empresa  ) {
-        $this->id = $id;
+    public function __construct($id_Cupon, $nombre, $imgUrl, $ubicacion, $precioBase, $fechaCreacion, $fechaInicio, $fechaVencimiento, $descripcion, $porcentaje, $activo, $id_Categoria, $id_Empresa) {
+        $this->id_Cupon = $id_Cupon;
         $this->nombre = $nombre;
         $this->imgUrl = $imgUrl;
         $this->ubicacion = $ubicacion;
         $this->precioBase = $precioBase;
+        $this->fechaCreacion = $fechaCreacion;
+        $this->fechaInicio = $fechaInicio;
+        $this->fechaVencimiento = $fechaVencimiento;
+        $this->descripcion = $descripcion;
+        $this->porcentaje = $porcentaje;
         $this->activo = $activo;
-        $this->categoria = $categoria;
-        $this->empresa = $empresa;
+        $this->id_Categoria = $id_Categoria;
+        $this->id_Empresa = $id_Empresa;
     }
 
-    
-
-
-
-    
-
-    // Getters and Setters
-    public function getId() {
-        return $this->id;
-    }
-
-    public function setId($id) {
-        $this->id = $id;
+    // Getters
+    public function getId_Cupon() {
+        return $this->id_Cupon;
     }
 
     public function getNombre() {
         return $this->nombre;
     }
 
-    public function setNombre($nombre) {
-        $this->nombre = $nombre;
-    }
-
     public function getImgUrl() {
         return $this->imgUrl;
-    }
-
-    public function setImgUrl($imgUrl) {
-        $this->imgUrl = $imgUrl;
     }
 
     public function getUbicacion() {
         return $this->ubicacion;
     }
 
-    public function setUbicacion($ubicacion) {
-        $this->ubicacion = $ubicacion;
-    }
-
     public function getPrecioBase() {
         return $this->precioBase;
     }
 
-    public function setPrecioBase($precioBase) {
-        $this->precioBase = $precioBase;
+    public function getFechaCreacion() {
+        return $this->fechaCreacion;
+    }
+
+    public function getFechaInicio() {
+        return $this->fechaInicio;
+    }
+
+    public function getFechaVencimiento() {
+        return $this->fechaVencimiento;
+    }
+
+    public function getDescripcion() {
+        return $this->descripcion;
+    }
+
+    public function getPorcentaje() {
+        return $this->porcentaje;
     }
 
     public function getActivo() {
         return $this->activo;
     }
 
+    public function getCategoria() {
+        return $this->id_Categoria;
+    }
+
+    public function getEmpresa() {
+        return $this->id_Empresa;
+    }
+
+    // Setters
+
+    public function setId_Cupon($id_Cupon) {
+        $this->id_Cupon = $id_Cupon;
+    }
+
+    public function setNombre($nombre) {
+        $this->nombre = $nombre;
+    }
+
+    public function setImgUrl($imgUrl) {
+        $this->imgUrl = $imgUrl;
+    }
+
+    public function setUbicacion($ubicacion) {
+        $this->ubicacion = $ubicacion;
+    }
+
+    public function setPrecioBase($precioBase) {
+        $this->precioBase = $precioBase;
+    }
+
+    public function setFechaCreacion($fechaCreacion) {
+        $this->fechaCreacion = $fechaCreacion;
+    }
+
+    public function setFechaInicio($fechaInicio) {
+        $this->fechaInicio = $fechaInicio;
+    }
+
+    public function setFechaVencimiento($fechaVencimiento) {
+        $this->fechaVencimiento = $fechaVencimiento;
+    }
+
+    public function setDescripcion($descripcion) {
+        $this->descripcion = $descripcion;
+    }
+
+    public function setPorcentaje($porcentaje) {
+        $this->porcentaje = $porcentaje;
+    }
+
     public function setActivo($activo) {
         $this->activo = $activo;
     }
 
-    public function getCategoria() {
-        return $this->categoria;
+    public function setCategoria($id_Categoria) {
+        $this->id_Categoria = $id_Categoria;
     }
 
-    public function setCategoria($categoria) {
-        $this->categoria = $categoria;
+    public function setEmpresa($id_Empresa) {
+        $this->id_Empresa = $id_Empresa;
     }
 
-    public function getEmpresa() {
-        return $this->empresa;
-    }
+    
 
-    public function setEmpresa($empresa) {
-        $this->empresa = $empresa;
-    }
-
+    
 }
 
 

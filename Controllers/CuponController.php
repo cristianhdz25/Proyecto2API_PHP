@@ -23,9 +23,9 @@ class CuponController
     {
         return $this->cuponBusiness->obtenerCuponesActivos();
     }
-    public function obtenerCuponPorEmpresa($idEmpresa)
+    public function obtenerCuponPorEmpresa($idEmpresa, $page)
     {
-        return $this->cuponBusiness->obtenerCuponPorEmpresa($idEmpresa);
+        return $this->cuponBusiness->obtenerCuponPorEmpresa($idEmpresa, $page);
     }
 
     public function obtenerCuponPorCategoria($idCategoria)
@@ -33,9 +33,9 @@ class CuponController
         return $this->cuponBusiness->obtenerCuponPorCategoria($idCategoria);
     }
 
-    public function registrarCupon( $nombre, $imgUrl, $ubicacion, $precioBase, $activo, $categoria, $empresa)
+    public function registrarCupon($nombre, $imgUrl, $ubicacion, $precioBase, $fechaCreacion, $fechaInicio, $fechaVencimiento, $descripcion, $porcentaje, $id_Categoria, $id_Empresa)
     {
-        $cupon = new Cupon(null, $nombre, $imgUrl, $ubicacion, $precioBase, $activo, $categoria, $empresa);
+        $cupon = new Cupon(null, $nombre, $imgUrl, $ubicacion, $precioBase, $fechaCreacion, $fechaInicio, $fechaVencimiento, $descripcion, $porcentaje, 0, $id_Categoria, $id_Empresa);
         return $this->cuponBusiness->registrarCupon($cupon);
     }
 
@@ -44,9 +44,14 @@ class CuponController
         return $this->cuponBusiness->obtenerCuponPorId($id);
     }
 
+    public function obtenerTotalPaginasCuponesPorEmpresa($idEmpresa)
+    {
+        return $this->cuponBusiness->obtenerTotalPaginasCuponesPorEmpresa($idEmpresa);
+    }
+
     public function actualizarCupon($id, $activo)
     {
-       
+
         return $this->cuponBusiness->actualizarCupon($id, $activo);
     }
 

@@ -46,8 +46,6 @@ class PromocionData
         return $resultado;
     }
 
-
-
     function obtenerPromocionesActivas()
     {
         $query = "select * from promocion where activo=1";

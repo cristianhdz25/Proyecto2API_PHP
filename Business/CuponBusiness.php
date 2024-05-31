@@ -21,9 +21,9 @@ class CuponBusiness
         return $this->cuponData->obtenerCuponesActivos();
     }
 
-    public function obtenerCuponPorEmpresa($idEmpresa)
+    public function obtenerCuponPorEmpresa($idEmpresa, $page)
     {
-        return $this->cuponData->obtenerCuponPorEmpresa($idEmpresa);
+        return $this->cuponData->obtenerCuponPorEmpresa($idEmpresa, $page);
     }
 
     public function obtenerCuponPorCategoria($idCategoria)
@@ -39,6 +39,11 @@ class CuponBusiness
     public function obtenerCuponPorId($id)
     {
         return $this->cuponData->obtenerCuponPorId($id);
+    }
+
+    public function obtenerTotalPaginasCuponesPorEmpresa($idEmpresa)
+    {
+        return $this->cuponData->obtenerTotalPaginasCuponesPorEmpresa($idEmpresa);
     }
 
     public function actualizarCupon($id, $activo)

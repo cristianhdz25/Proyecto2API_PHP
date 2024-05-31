@@ -14,7 +14,14 @@ class CuponData
 
     function obtenerCuponPorId($id)
     {
-        $query = "select * from cupon where id='$id'";
+        $query = "select * from cupon where id_Cupon='$id'";
+        $resultado = metodoGet($query);
+        return $resultado->fetchAll();
+    }
+
+    function obtenerTotalPaginasCuponesPorEmpresa($idEmpresa)
+    {
+        $query = "CALL sp_get_totalPages_cupones_by_empresa(" . $idEmpresa . ")";
         $resultado = metodoGet($query);
         return $resultado->fetchAll();
     }
@@ -26,12 +33,13 @@ class CuponData
         return $resultado->fetchAll();
     }
 
-    function obtenerCuponPorEmpresa($id)
+    function obtenerCuponPorEmpresa($idEmpresa, $page)
     {
-        $query = "select * from cupon where id_Empresa='$id'";
+        $query = "CALL sp_get_some_cupones_by_empresa(" . $idEmpresa . ", " . $page . ")";
         $resultado = metodoGet($query);
         return $resultado->fetchAll();
     }
+
 
     function obtenerCuponPorCategoria($id)
     {
@@ -46,11 +54,16 @@ class CuponData
         $imgUrl = $cupon->getImgUrl();
         $ubicacion = $cupon->getUbicacion();
         $precioBase = $cupon->getPrecioBase();
-        $activo = $cupon->getActivo();
+        $fechaCreacion = $cupon->getFechaCreacion();
+        $fechaInicio = $cupon->getFechaInicio();
+        $fechaVencimiento = $cupon->getFechaVencimiento();
+        $descripcion = $cupon->getDescripcion();
+        $porcentaje = $cupon->getPorcentaje();
         $id_Categoria = $cupon->getCategoria();
-        $id_Empresa	= $cupon->getEmpresa();
-        $query = "insert into cupon(nombre, imgUrl, ubicacion, precioBase, activo, id_Categoria, id_Empresa) values ('$nombre', '$imgUrl', '$ubicacion', '$precioBase', '$activo', '$id_Categoria', '$id_Empresa')";
-        $queryAutoIncrement = "select MAX(id) as id from cupon";
+        $id_Empresa = $cupon->getEmpresa();
+        $activo = $cupon->getActivo();
+        $query = "insert into cupon (nombre, imgUrl, ubicacion, precioBase, fechaCreacion, fechaInicio, fechaVencimiento, descripcion, porcentaje, id_Categoria, id_Empresa, activo) values ('$nombre','$imgUrl','$ubicacion','$precioBase','$fechaCreacion','$fechaInicio','$fechaVencimiento','$descripcion','$porcentaje','$id_Categoria','$id_Empresa','$activo')";
+        $queryAutoIncrement = "select MAX(id_Cupon) as id from cupon";
         $resultado = metodoPost($query, $queryAutoIncrement);
         return $resultado;
     }
