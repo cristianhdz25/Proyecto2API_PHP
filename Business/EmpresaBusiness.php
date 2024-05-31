@@ -26,13 +26,14 @@ class EmpresaBusiness   {
         return $this->empresaData->actualizarEmpresa($empresa);
     }
 
-    public function obtenerEmpresaPorCorreo($correo) {
-        return $this->empresaData->obtenerEmpresaPorCorreo($correo);
+    public function obtenerTotalPaginasEmpresas() {
+        return $this->empresaData->obtenerTotalPaginasEmpresas();
     }
 
-    public function obtenerEmpresaPorCedula($cedula) {
-        return $this->empresaData->obtenerEmpresaPorCedula($cedula);
+    public function obtenerEmpresasPorPagina($page) {
+        return $this->empresaData->obtenerEmpresasPorPagina($page);
     }
+
 
     public function obtenerEmpresaPorCorreoYContrasenna($correo, $contrasenna) {
         return $this->empresaData->obtenerEmpresaPorCorreoYContrasenna($correo, $contrasenna);

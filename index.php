@@ -19,7 +19,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         echo json_encode($empresa);
         header("HTTP/1.1 200 OK");
         exit();
-    } else if ($endpoint == 'empresas') {
+    } else if ($endpoint == 'empresas' && isset($_GET['page'])) {
+        require_once 'Controllers/EmpresaController.php';
+        $page = $_GET['page'];
+        $empresaController = new EmpresaController();
+        $empresas = $empresaController->obtenerEmpresasPorPagina($page);
+        echo json_encode($empresas);
+        header("HTTP/1.1 200 OK");
+        exit();
+    } else if ($endpoint == 'empresas' && isset($_GET['total'])) {
+        require_once 'Controllers/EmpresaController.php';
+        $empresaController = new EmpresaController();
+        $empresas = $empresaController->obtenerTotalPaginasEmpresas();
+        echo json_encode($empresas);
+        header("HTTP/1.1 200 OK");
+        exit();
+    } else if ($endpoint == 'empresas' ) {
         require_once 'Controllers/EmpresaController.php';
         $empresaController = new EmpresaController();
         $empresas = $empresaController->obtenerEmpresas();

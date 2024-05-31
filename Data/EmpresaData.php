@@ -16,6 +16,20 @@ class EmpresaData
         return $resultado->fetchAll();
     }
 
+    function obtenerTotalPaginasEmpresas()
+    {
+        $query = "CALL sp_get_totalPages_empresas()";
+        $resultado = metodoGet($query);
+        return $resultado->fetchAll();
+    }
+
+    function obtenerEmpresasPorPagina($page)
+    {
+        $query = "CALL sp_get_some_empresas(" . $page . ")";
+        $resultado = metodoGet($query);
+        return $resultado->fetchAll();
+    }
+
     function insertarEmpresa($empresa)
     {
         $nombre = $empresa->getNombre();

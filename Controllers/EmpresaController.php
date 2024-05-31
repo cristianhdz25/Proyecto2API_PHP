@@ -24,6 +24,14 @@ class EmpresaController {
         return $this->empresaBusiness->obtenerEmpresaPorId($id);
     }
 
+    public function obtenerTotalPaginasEmpresas() {
+        return $this->empresaBusiness->obtenerTotalPaginasEmpresas();
+    }
+
+    public function obtenerEmpresasPorPagina($page) {
+        return $this->empresaBusiness->obtenerEmpresasPorPagina($page);
+    }
+
     public function actualizarEmpresa($id, $nombre, $correo, $contrasenna, $telefono, $direccionFisica, $cedula, $fechaCreacion, $primeraVez, $activo) {
         $empresa = new Empresa($id, $nombre, $correo, $contrasenna, $telefono, $direccionFisica, $cedula, $fechaCreacion, $primeraVez, $activo);
         return $this->empresaBusiness->actualizarEmpresa($empresa);
