@@ -75,6 +75,14 @@ class CuponData
         return $resultado;
     }
 
+        function obtenerCuponPorNombreCategoria($nombre)
+    {
+        $query = "select * from cupon C join categoria ca on c.id_Categoria = ca.id_Categoria where ca.nombre = '$nombre';";
+        $resultado = metodoGet($query);
+        return $resultado->fetchAll();
+    }
+
+
 
 
 

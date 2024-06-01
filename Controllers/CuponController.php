@@ -55,6 +55,11 @@ class CuponController
         return $this->cuponBusiness->actualizarCupon($id, $activo);
     }
 
+    public function obtenerCuponPorNombreCategoria($nombre)
+    {
+        return $this->cuponBusiness->obtenerCuponPorNombreCategoria($nombre);
+    }
+
 
 
 
