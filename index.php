@@ -91,6 +91,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         echo json_encode($cupon);
         header("HTTP/1.1 200 OK");
         exit();
+    }else if ($endpoint == 'cupones' && isset($_GET['idDetalles'])) {
+        require_once 'Controllers/CuponController.php';
+        $id = $_GET['idDetalles'];
+        $cuponController = new CuponController();
+        $cupon = $cuponController->obtenerDetallesCupon($id);
+        echo json_encode($cupon);
+        header("HTTP/1.1 200 OK");
+        exit();
     } else if ($endpoint == 'cupones') {
         require_once 'Controllers/CuponController.php';
         $cuponController = new CuponController();

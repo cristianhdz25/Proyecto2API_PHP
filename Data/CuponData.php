@@ -82,6 +82,13 @@ class CuponData
         return $resultado->fetchAll();
     }
 
+    function obtenerDetallesCupon($id)
+    {
+        $query = "CALL sp_get_cupon_detalles(" . $id . ")";
+        $resultado = metodoGet($query);
+        return $resultado->fetchAll();
+    }
+
 
 
 
