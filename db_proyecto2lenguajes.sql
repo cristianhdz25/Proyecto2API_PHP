@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost:3307
--- Tiempo de generación: 31-05-2024 a las 08:06:20
+-- Tiempo de generación: 03-06-2024 a las 02:16:06
 -- Versión del servidor: 10.4.27-MariaDB
 -- Versión de PHP: 8.0.25
 
@@ -27,10 +27,21 @@ DELIMITER $$
 --
 -- Procedimientos
 --
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_get_admin_by_usuario_contrasenna` (IN `_usuario` VARCHAR(255), IN `_contrasenna` VARCHAR(255))   SELECT id_Admin
+FROM administrador
+WHERE _usuario LIKE usuario
+AND _contrasenna LIKE contrasenna$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_get_some_cupones_by_empresa` (IN `idEmpresa` INT, IN `page` INT)   BEGIN
 DECLARE v_displacement INT DEFAULT ((page - 1) * 10);
 select * from cupon
 where id_Empresa = idEmpresa
+LIMIT v_displacement, 10;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_get_some_empresas` (IN `page` INT)   BEGIN
+DECLARE v_displacement INT DEFAULT ((page - 1) * 10);
+select * from empresa 
 LIMIT v_displacement, 10;
 END$$
 
@@ -43,6 +54,9 @@ END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_get_totalPages_cupones_by_empresa` (IN `idEmpresa` INT)   SELECT CEIL(COUNT(*)/10) AS total_pages
 FROM cupon WHERE id_Empresa = idEmpresa$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_get_totalPages_empresas` ()   SELECT CEIL(COUNT(*)/10) AS total_pages
+FROM empresa$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_get_totalPages_promociones_by_cupon` (IN `idCupon` INT)   SELECT CEIL(COUNT(*)/10) AS total_pages
 FROM promocion WHERE id_Cupon = idCupon$$
@@ -60,6 +74,13 @@ CREATE TABLE `administrador` (
   `usuario` varchar(255) NOT NULL,
   `contrasenna` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `administrador`
+--
+
+INSERT INTO `administrador` (`id_Admin`, `usuario`, `contrasenna`) VALUES
+(1, 'admin', 'admin');
 
 -- --------------------------------------------------------
 
@@ -96,7 +117,7 @@ CREATE TABLE `cupon` (
   `fechaVencimiento` date NOT NULL,
   `descripcion` varchar(300) NOT NULL,
   `activo` tinyint(1) NOT NULL,
-  `porcentaje` int(11) NOT NULL,
+  `porcentaje` double NOT NULL,
   `ubicacion` varchar(300) NOT NULL,
   `id_Empresa` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
@@ -106,13 +127,13 @@ CREATE TABLE `cupon` (
 --
 
 INSERT INTO `cupon` (`id_Cupon`, `nombre`, `imgUrl`, `precioBase`, `id_Categoria`, `fechaCreacion`, `fechaInicio`, `fechaVencimiento`, `descripcion`, `activo`, `porcentaje`, `ubicacion`, `id_Empresa`) VALUES
-(1, 'Coca Cola', './img/Gojo ;c.png', 1500, 1, '2024-05-30', '2024-05-28', '2024-05-31', '0', 0, 12, 'Costa Rica', 1),
-(2, 'Cristian', './img/thumb-1920-1334857.png', 20000, 1, '2024-05-30', '2024-05-27', '2024-05-31', '0', 0, 1, 'Costa Rica', 1),
-(3, 'Cristian', './img/coctel-sexo-en-la-playa-sex.jpg', 20000, 1, '2024-05-30', '2024-05-20', '2024-06-06', '0', 0, 15, 'Costa Rica', 1),
-(4, 'Cristian', './img/rick-morty.png', 20000, 1, '2024-05-30', '2024-05-31', '2024-06-01', '0', 0, 15, 'CR', 1),
-(5, 'Dos Pinos', 'null', 25000, 1, '2024-05-30', '2024-05-31', '2024-06-10', 'Descuento', 0, 15, 'Costa Rica', 4),
-(6, 'Estandarizada', './img/rick-morty.png', 15000, 1, '2024-05-31', '2024-06-01', '2024-06-16', 'Ober', 0, 15, 'CR', 4),
-(7, 'Prueba', './img/Gojo ;c.png', 20000, 1, '2024-06-01', '2024-06-02', '2024-06-09', 'Cupon de descuento ', 0, 15, 'Costa Rica', 4);
+(1, 'Descuento', 'http://localhost/Proyecto2_APIImages_PHP/img/Gojo ;c.png', 20000, 1, '2024-06-03', '2024-06-04', '2024-06-29', 'Cupon de descuento ', 1, 0.25, 'Costa Rica', 1),
+(2, 'Estandarizada', 'http://localhost/Proyecto2_APIImages_PHP/img/Screenshot%202023-04-03%20131525.png', 1500, 1, '2024-06-03', '2024-06-04', '2024-06-30', 'Cupon de descuento ', 0, 0.15, 'Costa Rica', 1),
+(3, 'Dos Pinos', 'http://localhost/Proyecto2_APIImages_PHP/img/Gojo ;c.png', 20000, 1, '2024-06-03', '2024-06-04', '2024-06-28', 'Cupon de descuento ', 0, 0.05, 'Costa Rica', 1),
+(4, 'Cristian', 'http://localhost/Proyecto2_APIImages_PHP/img/Gojo ;c.png', 20000, 1, '2024-06-03', '2024-06-04', '2024-06-27', 'Cupon de descuento ', 0, 0.35, 'Costa Rica', 1),
+(5, 'Dos Pinos', 'http://localhost/Proyecto2_APIImages_PHP/img/rick-morty.png', 30000, 1, '2024-06-03', '2024-06-05', '2024-06-29', 'Cupon de descuento ', 1, 0.17, 'Costa Rica', 1),
+(6, 'Cristian', 'http://localhost/Proyecto2_APIImages_PHP/img/rick-morty.png', 20000, 1, '2024-06-03', '2024-06-05', '2024-06-26', 'Cupon de descuento ', 0, 0.28, 'Costa Rica', 1),
+(7, 'Cristian', 'http://localhost/Proyecto2_APIImages_PHP/img/rick-morty.png', 20000, 1, '2024-06-03', '2024-06-05', '2024-06-27', 'Cupon de descuento ', 0, 0.14, 'CR', 1);
 
 -- --------------------------------------------------------
 
@@ -130,26 +151,22 @@ CREATE TABLE `empresa` (
   `fechaCreacion` date NOT NULL,
   `telefono` varchar(15) NOT NULL,
   `primeraVez` tinyint(1) NOT NULL,
-  `activo` tinyint(1) NOT NULL
+  `activo` tinyint(1) NOT NULL,
+  `cedulaTipo` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 --
 -- Volcado de datos para la tabla `empresa`
 --
 
-INSERT INTO `empresa` (`id`, `correo`, `contrasenna`, `nombre`, `direccionFisica`, `cedula`, `fechaCreacion`, `telefono`, `primeraVez`, `activo`) VALUES
-(1, 'losreyes2504@gmail.com', '1324', 'Dos Pinos 1', 'Los Alpes', '11-2222-2555', '2005-12-25', '78965874', 0, 0),
-(2, 'losreyes2504@gmail.com', '1234', 'Cristian Hernandez', 'Juan Viñas Costa Rica', '22-1425-0144', '2024-04-17', '72810534', 0, 0),
-(3, 'majobm@gmail.com', '1234', 'Cristian', 'Juan Viñas', '22-1425-0144', '2023-08-17', '72810534', 0, 0),
-(4, 'losreyes2504@gmail.com', '1234', 'Dos Pinos 3', 'Juan Viñas', '22-1425-0144', '2024-04-23', '72810534', 0, 0),
-(5, 'losreyes2504@gmail.com', '1234', 'Dos Pinos', 'Juan Viñas', '22-1425-0144', '2024-04-20', '72810535', 0, 0),
-(6, 'majobm@gmail.com', '1234', 'Probando', 'Juan Viñas', '22-1425-0144', '2024-04-10', '72810534', 0, 0),
-(7, 'joseant2302@gmail.com', '13', 'Cristian 2', 'Juan Viñas', '11-2225-1457', '2018-04-16', '72849578', 1, 0),
-(8, 'rolo@gmail.com', '134', 'Prueba', 'Coronado', '22-1425-0144', '2024-05-01', '72812547', 1, 0),
-(9, 'majobm@gmail.com', '1234', 'Cristian', 'Coronado', '22-1425-0144', '2024-04-16', '78965874', 1, 0),
-(10, 'yordi@gmail.com', '134', 'Yordi', 'Juan Viñas', '11-2222-2555', '2024-05-03', '12587487', 1, 0),
-(11, 'pepsi@gmail.com', '1234', 'Pepsi', 'Coronado', '22-1425-0144', '2024-05-04', '72810534', 1, 0),
-(12, 'losreyes2504@gmail.com', '1234', 'Cristian', 'Juan Viñas', '11-2222-2555', '2024-05-26', '72474578', 1, 1);
+INSERT INTO `empresa` (`id`, `correo`, `contrasenna`, `nombre`, `direccionFisica`, `cedula`, `fechaCreacion`, `telefono`, `primeraVez`, `activo`, `cedulaTipo`) VALUES
+(1, 'majobm@gmail.com', '5r6XCe^8', 'Dos Pinos', 'Juan Viñas Costa Rica', '01-2145-2564', '2024-06-02', '7284-9578', 1, 1, 1),
+(2, 'joseant2302@gmail.com', 'i3!LwXFR', 'Prueba', 'Coronado', '01-0254-7874', '2024-06-04', '2568-2547', 1, 1, 1),
+(3, 'majobm@gmail.com', 'TC!&wC3d', 'Estandarizada', 'Juan Viñas Costa Rica', '11-2545-3457', '2024-05-29', '5789-5784', 1, 1, 0),
+(4, 'rolo@gmail.com', '&Eh*Yy2G', 'Prueba', 'Los Alpes', '01-0254-7874', '2024-06-02', '4785-4785', 1, 1, 1),
+(5, 'rolo@gmail.com', 'Fs.^x21&', 'Prueba', 'Juan Viñas Costa Rica', '01-2545-1578', '2024-06-01', '7598-6584', 1, 1, 1),
+(6, 'majobm@gmail.com', '4i%UMS#r', 'Dos Pinos', 'Juan Viñas Costa Rica', '02-356-589275', '2024-06-10', '1457-9657', 1, 0, 0),
+(7, 'majobm@gmail.com', '7rex*KkX', 'Dos Pinos', 'Juan Viñas Costa Rica', '01-2145-2564', '2024-06-02', '7281-0534', 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -160,7 +177,7 @@ INSERT INTO `empresa` (`id`, `correo`, `contrasenna`, `nombre`, `direccionFisica
 CREATE TABLE `promocion` (
   `id_Promocion` int(11) NOT NULL,
   `nombre` varchar(255) NOT NULL,
-  `porcentaje` varchar(5) NOT NULL,
+  `porcentaje` double NOT NULL,
   `fechaInicio` date NOT NULL,
   `fechaVencimiento` date NOT NULL,
   `id_Cupon` int(11) NOT NULL,
@@ -172,9 +189,7 @@ CREATE TABLE `promocion` (
 --
 
 INSERT INTO `promocion` (`id_Promocion`, `nombre`, `porcentaje`, `fechaInicio`, `fechaVencimiento`, `id_Cupon`, `activo`) VALUES
-(1, 'Cristian', '15', '2024-05-31', '2024-06-04', 5, 0),
-(2, 'Cristian', '15', '2024-05-31', '2024-06-05', 5, 0),
-(3, 'Estandarizada', '15', '2024-06-03', '2024-06-07', 7, 0);
+(1, 'Promocion 1', 0.13, '2024-06-05', '2024-06-12', 1, 0);
 
 --
 -- Índices para tablas volcadas
@@ -218,7 +233,7 @@ ALTER TABLE `promocion`
 -- AUTO_INCREMENT de la tabla `administrador`
 --
 ALTER TABLE `administrador`
-  MODIFY `id_Admin` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_Admin` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `categoria`
@@ -236,13 +251,13 @@ ALTER TABLE `cupon`
 -- AUTO_INCREMENT de la tabla `empresa`
 --
 ALTER TABLE `empresa`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `promocion`
 --
 ALTER TABLE `promocion`
-  MODIFY `id_Promocion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_Promocion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
