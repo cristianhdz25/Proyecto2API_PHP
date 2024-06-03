@@ -51,7 +51,7 @@ class CuponBusiness
         return $this->cuponData->actualizarCupon($id, $activo);
     }
 
-    public function obtenerCuponPorNombreCategoria($nombre)
+ public function obtenerCuponPorNombreCategoria($nombre)
     {
         return $this->cuponData->obtenerCuponPorNombreCategoria($nombre);
     }

@@ -26,12 +26,13 @@ class CuponData
         return $resultado->fetchAll();
     }
 
-    function obtenerCuponesActivos()
+  function obtenerCuponesActivos()
     {
-        $query = "select * from cupon where activo=1";
+        $query = "CALL sp_obtener_cupones_activos()";
         $resultado = metodoGet($query);
         return $resultado->fetchAll();
     }
+
 
     function obtenerCuponPorEmpresa($idEmpresa, $page)
     {
@@ -43,7 +44,7 @@ class CuponData
 
     function obtenerCuponPorCategoria($id)
     {
-        $query = "select * from cupon where id_Categoria='$id'";
+        $query = "CALL sp_obtener_cupones_por_id_categoria (" . $id . ")";
         $resultado = metodoGet($query);
         return $resultado->fetchAll();
     }
@@ -75,14 +76,14 @@ class CuponData
         return $resultado;
     }
 
-        function obtenerCuponPorNombreCategoria($nombre)
+      function obtenerCuponPorNombreCategoria($nombre)
     {
-        $query = "select * from cupon C join categoria ca on c.id_Categoria = ca.id_Categoria where ca.nombre = '$nombre';";
+        $query = "sp_obtener_cupones_por_categoria(" . $nombre . ")";
         $resultado = metodoGet($query);
         return $resultado->fetchAll();
     }
 
-    function obtenerDetallesCupon($id)
+   function obtenerDetallesCupon($id)
     {
         $query = "CALL sp_get_cupon_detalles(" . $id . ")";
         $resultado = metodoGet($query);
