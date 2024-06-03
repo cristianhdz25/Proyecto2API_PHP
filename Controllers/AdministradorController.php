@@ -1,20 +1,20 @@
 <?php
 
 require_once 'Entities/Administrador.php';
-require_once 'DataAccess/administradorData.php';
+require_once 'Business/AdministradorBusiness.php';
 
 class AdministradorController
 {
 
-    private $administradorData;
+    private $administradorBusiness;
 
     public function __construct()
     {
-        $this->administradorData = new AdministradorData();
+        $this->administradorBusiness = new AdministradorBusiness();
     }
 
-    public function obtenerAdministradorPorId($usuario, $contrasenna)
+    public function obtenerAdministradorPorUsuarioYContrasenna($usuario, $contrasenna)
     {
-        return $this->administradorData->obtenerAdministradorPorId($usuario, $contrasenna);
+        return $this->administradorBusiness->obtenerAdministradorPorUsuarioYContrasenna($usuario, $contrasenna);
     }
 }

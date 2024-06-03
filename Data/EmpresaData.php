@@ -37,11 +37,12 @@ class EmpresaData
         $contrasenna = $empresa->getContrasenna();
         $telefono = $empresa->getTelefono();
         $direccionFisica = $empresa->getDireccionFisica();
+        $cedulaTipo = $empresa->getCedulaTipo();
         $cedula = $empresa->getCedula();
         $fechaCreacion = $empresa->getFechaCreacion();
         $primeraVez = $empresa->getPrimeraVez();
         $activo = $empresa->getActivo();
-        $query = "insert into empresa(nombre, correo, contrasenna, telefono, direccionFisica, cedula, fechaCreacion, primeraVez, activo) values ('$nombre', '$correo', '$contrasenna', '$telefono', '$direccionFisica', '$cedula', '$fechaCreacion', '$primeraVez', '$activo')";
+        $query = "insert into empresa(nombre, correo, contrasenna, telefono, direccionFisica, cedula, fechaCreacion, primeraVez, activo, cedulaTipo) values ('$nombre', '$correo', '$contrasenna', '$telefono', '$direccionFisica', '$cedula', '$fechaCreacion', '$primeraVez', '$activo' , '$cedulaTipo')";
         $queryAutoIncrement = "select MAX(id) as id from empresa";
         $resultado = metodoPost($query, $queryAutoIncrement);
         return $resultado;
@@ -55,11 +56,19 @@ class EmpresaData
         $contrasenna = $empresa->getContrasenna();
         $telefono = $empresa->getTelefono();
         $direccionFisica = $empresa->getDireccionFisica();
+        $cedulaTipo = $empresa->getCedulaTipo();
         $cedula = $empresa->getCedula();
         $fechaCreacion = $empresa->getFechaCreacion();
         $primeraVez = $empresa->getPrimeraVez();
         $activo = $empresa->getActivo();
-        $query = "UPDATE empresa SET nombre='$nombre', correo='$correo', contrasenna='$contrasenna', telefono='$telefono', direccionFisica='$direccionFisica', cedula='$cedula', fechaCreacion='$fechaCreacion', primeraVez='$primeraVez', activo='$activo' WHERE id='$id'";
+        $query = "UPDATE empresa SET nombre='$nombre', correo='$correo', contrasenna='$contrasenna', telefono='$telefono', direccionFisica='$direccionFisica', cedula='$cedula', fechaCreacion='$fechaCreacion', primeraVez='$primeraVez', activo='$activo', cedulaTipo='$cedulaTipo' WHERE id='$id'";
+        $resultado = metodoPut($query);
+        return $resultado;
+    }
+
+    function actualizarEstadoEmpresa($id, $estado)
+    {
+        $query = "UPDATE empresa SET activo='$estado' WHERE id='$id'";
         $resultado = metodoPut($query);
         return $resultado;
     }

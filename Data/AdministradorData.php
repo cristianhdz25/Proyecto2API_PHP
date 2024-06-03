@@ -1,11 +1,13 @@
 <?php
 
 require_once 'Conexion.php';
-class AdministradorData{
+class AdministradorData {
 
-
-    function obtenerAdministradorPorId ($usuario, $contrasenna) {
-        $query = "select * from administrador where usuario = '$usuario' and contrasenna = '$contrasenna'";
+    public function __construct() {
+        
+    }
+    function obtenerAdministradorPorUsuarioYContrasenna($usuario, $contrasenna) {
+        $query = "CALL sp_get_admin_by_usuario_contrasenna('$usuario', '$contrasenna')";
         $resultado = metodoGet($query);
         return $resultado->fetchAll();
     }

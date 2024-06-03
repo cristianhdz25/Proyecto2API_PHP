@@ -15,8 +15,8 @@ class EmpresaController {
         return $this->empresaBusiness->obtenerEmpresas();
     }
 
-    public function registrarEmpresa($nombre, $correo, $contrasenna, $telefono, $direccionFisica, $cedula, $fechaCreacion, $primeraVez, $activo) {
-        $empresa = new Empresa(null, $nombre, $correo, $contrasenna, $telefono, $direccionFisica, $cedula, $fechaCreacion, $primeraVez, $activo);
+    public function registrarEmpresa($nombre, $correo, $contrasenna, $telefono, $direccionFisica, $cedula, $fechaCreacion, $cedulaTipo) {
+        $empresa = new Empresa(null, $nombre, $correo, $contrasenna, $telefono, $direccionFisica, $cedula, $fechaCreacion, 1,1, $cedulaTipo);
         return $this->empresaBusiness->insertarEmpresa($empresa);
     }
 
@@ -32,8 +32,12 @@ class EmpresaController {
         return $this->empresaBusiness->obtenerEmpresasPorPagina($page);
     }
 
-    public function actualizarEmpresa($id, $nombre, $correo, $contrasenna, $telefono, $direccionFisica, $cedula, $fechaCreacion, $primeraVez, $activo) {
-        $empresa = new Empresa($id, $nombre, $correo, $contrasenna, $telefono, $direccionFisica, $cedula, $fechaCreacion, $primeraVez, $activo);
+    public function actualizarEmpresa($id, $nombre, $correo, $contrasenna, $telefono, $direccionFisica, $cedula, $fechaCreacion, $primeraVez, $activo , $cedulaFisica) {
+        $empresa = new Empresa($id, $nombre, $correo, $contrasenna, $telefono, $direccionFisica, $cedula, $fechaCreacion, $primeraVez, $activo , $cedulaFisica);
         return $this->empresaBusiness->actualizarEmpresa($empresa);
+    }
+
+    public function actualizarEstadoEmpresa($id, $estado) {
+        return $this->empresaBusiness->actualizarEstadoEmpresa($id, $estado);
     }
 }

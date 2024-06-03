@@ -5,18 +5,18 @@ class Empresa
 
     private $id;
     private $nombre;
-
     private $correo;
     private $contrasenna;
     private $telefono;
     private $direccionFisica;
+    private $cedulaTipo;
     private $cedula;
     private $fechaCreacion;
     private $primeraVez;
     private $activo;
 
     // Constructor
-    public function __construct($id, $nombre, $correo , $contrasenna , $telefono , $direccionFisica , $cedula, $fechaCreacion , $primeraVez , $activo )
+    public function __construct($id, $nombre, $correo, $contrasenna, $telefono, $direccionFisica, $cedula, $fechaCreacion, $primeraVez, $activo, $cedulaTipo)
     {
         $this->id = $id;
         $this->nombre = $nombre;
@@ -28,6 +28,7 @@ class Empresa
         $this->fechaCreacion = $fechaCreacion;
         $this->primeraVez = $primeraVez;
         $this->activo = $activo;
+        $this->cedulaTipo = $cedulaTipo;
     }
 
     // Getters and Setters
@@ -75,6 +76,17 @@ class Empresa
     {
         return $this->telefono;
     }
+
+    public function getCedulaTipo()
+    {
+        return $this->cedulaTipo;
+    }
+
+    public function setCedulaTipo($cedulaTipo)
+    {
+        $this->$cedulaTipo = $cedulaTipo;
+    }
+
 
     public function setTelefono($telefono)
     {

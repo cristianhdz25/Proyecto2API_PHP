@@ -70,7 +70,7 @@ class CuponData
 
     function actualizarCupon($id, $activo)
     {
-        $query = "update cupon set activo='$activo' where id='$id'";
+        $query = "update cupon set activo='$activo' where id_Cupon='$id'";
         $resultado = metodoPut($query);
         return $resultado;
     }
