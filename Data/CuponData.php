@@ -78,7 +78,7 @@ class CuponData
 
       function obtenerCuponPorNombreCategoria($nombre)
     {
-        $query = "sp_obtener_cupones_por_categoria(" . $nombre . ")";
+        $query = "CALL sp_obtener_cupones_por_categoria('" . $nombre . "')";
         $resultado = metodoGet($query);
         return $resultado->fetchAll();
     }

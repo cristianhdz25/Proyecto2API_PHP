@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost:3307
--- Tiempo de generación: 03-06-2024 a las 03:30:05
--- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.0.30
+-- Tiempo de generación: 03-06-2024 a las 03:57:59
+-- Versión del servidor: 10.4.27-MariaDB
+-- Versión de PHP: 8.0.25
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -119,7 +119,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_obtener_cupones_activos` ()   BE
     LEFT JOIN 
         promocion ON cupon.id_Cupon = promocion.id_Cupon
     WHERE 
-        promocion.activo = 1 and cupon.activo = 1;
+        cupon.activo = 1;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_obtener_cupones_por_categoria` (IN `p_nombreCategoria` VARCHAR(255))   BEGIN
@@ -150,7 +150,6 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_obtener_cupones_por_categoria` (
         promocion ON cupon.id_Cupon = promocion.id_Cupon
     WHERE 
         categoria.nombre = p_nombreCategoria
-        AND promocion.activo = 1 
         AND cupon.activo = 1;
 END$$
 
@@ -182,7 +181,6 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_obtener_cupones_por_id_categoria
         promocion ON cupon.id_Cupon = promocion.id_Cupon
     WHERE 
         categoria.id_Categoria = p_idCategoria
-        AND promocion.activo = 1 
         AND cupon.activo = 1;
 END$$
 
