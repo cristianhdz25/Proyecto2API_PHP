@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost:3307
--- Tiempo de generación: 03-06-2024 a las 03:57:59
+-- Tiempo de generación: 04-06-2024 a las 05:38:21
 -- Versión del servidor: 10.4.27-MariaDB
 -- Versión de PHP: 8.0.25
 
@@ -63,6 +63,12 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_get_cupon_detalles` (IN `cuponId
         AND (promocion.activo = 1 OR promocion.activo IS NULL);
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_get_some_categorias` (IN `page` INT)   BEGIN
+DECLARE v_displacement INT DEFAULT ((page - 1) * 10);
+select * from categoria
+LIMIT v_displacement, 10;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_get_some_cupones_by_empresa` (IN `idEmpresa` INT, IN `page` INT)   BEGIN
 DECLARE v_displacement INT DEFAULT ((page - 1) * 10);
 select * from cupon
@@ -82,6 +88,9 @@ select * from promocion
 where id_Cupon = idCupon
 LIMIT v_displacement, 10;
 END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_get_totalPages_categorias` ()   SELECT CEIL(COUNT(*)/10) AS total_pages
+FROM categoria$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_get_totalPages_cupones_by_empresa` (IN `idEmpresa` INT)   SELECT CEIL(COUNT(*)/10) AS total_pages
 FROM cupon WHERE id_Empresa = idEmpresa$$
@@ -213,15 +222,17 @@ INSERT INTO `administrador` (`id_Admin`, `usuario`, `contrasenna`) VALUES
 
 CREATE TABLE `categoria` (
   `id_Categoria` int(11) NOT NULL,
-  `nombre` varchar(255) NOT NULL
+  `nombre` varchar(255) NOT NULL,
+  `estado` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 --
 -- Volcado de datos para la tabla `categoria`
 --
 
-INSERT INTO `categoria` (`id_Categoria`, `nombre`) VALUES
-(1, 'Comida');
+INSERT INTO `categoria` (`id_Categoria`, `nombre`, `estado`) VALUES
+(1, 'Comida', 1),
+(2, 'Bebida', 1);
 
 -- --------------------------------------------------------
 
@@ -256,7 +267,14 @@ INSERT INTO `cupon` (`id_Cupon`, `nombre`, `imgUrl`, `precioBase`, `id_Categoria
 (4, 'Cristian', 'http://localhost/Proyecto2_APIImages_PHP/img/Gojo ;c.png', 20000, 1, '2024-06-03', '2024-06-04', '2024-06-27', 'Cupon de descuento ', 0, 0.35, 'Costa Rica', 1),
 (5, 'Dos Pinos', 'http://localhost/Proyecto2_APIImages_PHP/img/rick-morty.png', 30000, 1, '2024-06-03', '2024-06-05', '2024-06-29', 'Cupon de descuento ', 1, 0.17, 'Costa Rica', 1),
 (6, 'Cristian', 'http://localhost/Proyecto2_APIImages_PHP/img/rick-morty.png', 20000, 1, '2024-06-03', '2024-06-05', '2024-06-26', 'Cupon de descuento ', 0, 0.28, 'Costa Rica', 1),
-(7, 'Cristian', 'http://localhost/Proyecto2_APIImages_PHP/img/rick-morty.png', 20000, 1, '2024-06-03', '2024-06-05', '2024-06-27', 'Cupon de descuento ', 0, 0.14, 'CR', 1);
+(7, 'Cristian', 'http://localhost/Proyecto2_APIImages_PHP/img/rick-morty.png', 20000, 1, '2024-06-03', '2024-06-05', '2024-06-27', 'Cupon de descuento ', 0, 0.14, 'CR', 1),
+(8, 'Dos Pinos', 'null', 20000, 1, '2024-06-03', '2024-06-04', '2024-06-24', 'Cupon de descuento', 0, 0.15, 'Costa Rica', 1),
+(9, 'Prueba', 'http://localhost/Proyecto2_APIImages_PHP/img/stretched-1920-1080-1342982.jpeg', 20000, 1, '2024-06-04', '2024-06-05', '2024-06-30', 'Cupon de descuento', 0, 0.3, 'Costa Rica', 1),
+(10, 'Dos Pinos', 'http://localhost/Proyecto2_APIImages_PHP/img/stretched-1920-1080-1342982.jpeg', 20000, 1, '2024-06-04', '2024-06-05', '2024-06-30', 'Descuento', 0, 0.22, 'Costa Rica', 1),
+(11, 'Cristian', 'http://localhost/Proyecto2_APIImages_PHP/img/stretched-1920-1080-1342982.jpeg', 20000, 1, '2024-06-04', '2024-06-06', '2024-06-30', 'Cupon de descuento', 0, 0.25, 'Costa', 1),
+(12, 'Estandarizada', 'null', 20000, 1, '2024-06-04', '2024-06-07', '2024-06-15', 'Cupon de descuento', 0, 0.15, 'Costa Rica', 1),
+(13, 'Estandarizada', 'http://localhost/Proyecto2_APIImages_PHP/img/stretched-1920-1080-1342982.jpeg', 12000, 1, '2024-06-04', '2024-06-06', '2024-06-23', 'CUpon', 0, 0.14, 'Costa', 1),
+(14, 'Estandarizada', 'http://localhost/Proyecto2_APIImages_PHP/img/stretched-1920-1080-1342982.jpeg', 12222, 1, '2024-06-04', '2024-06-06', '2024-06-22', 'Cupon', 0, 0.15, 'Costa Rica', 1);
 
 -- --------------------------------------------------------
 
@@ -283,13 +301,13 @@ CREATE TABLE `empresa` (
 --
 
 INSERT INTO `empresa` (`id`, `correo`, `contrasenna`, `nombre`, `direccionFisica`, `cedula`, `fechaCreacion`, `telefono`, `primeraVez`, `activo`, `cedulaTipo`) VALUES
-(1, 'majobm@gmail.com', '5r6XCe^8', 'Dos Pinos', 'Juan Viñas Costa Rica', '01-2145-2564', '2024-06-02', '7284-9578', 1, 1, 1),
+(1, 'majobm@gmail.com', '5r6XCe^8', 'Dos Pinos', 'Juan Viñas Costa Rica', '11-255-345789', '2024-05-30', '7284-9578', 1, 0, 0),
 (2, 'joseant2302@gmail.com', 'i3!LwXFR', 'Prueba', 'Coronado', '01-0254-7874', '2024-06-04', '2568-2547', 1, 1, 1),
-(3, 'majobm@gmail.com', 'TC!&wC3d', 'Estandarizada', 'Juan Viñas Costa Rica', '11-2545-3457', '2024-05-29', '5789-5784', 1, 1, 0),
-(4, 'rolo@gmail.com', '&Eh*Yy2G', 'Prueba', 'Los Alpes', '01-0254-7874', '2024-06-02', '4785-4785', 1, 1, 1),
+(3, 'majobm@gmail.com', 'TC!&wC3d', 'Estandarizada', 'Juan Viñas Costa Rica', '11-2545-3457', '2024-05-29', '5789-5784', 1, 0, 0),
+(4, 'rolo@gmail.com', '&Eh*Yy2G', 'Prueba', 'Los Alpes', '01-0254-7874', '2024-06-02', '4785-4785', 1, 0, 1),
 (5, 'rolo@gmail.com', 'Fs.^x21&', 'Prueba', 'Juan Viñas Costa Rica', '01-2545-1578', '2024-06-01', '7598-6584', 1, 1, 1),
-(6, 'majobm@gmail.com', '4i%UMS#r', 'Dos Pinos', 'Juan Viñas Costa Rica', '02-356-589275', '2024-06-10', '1457-9657', 1, 0, 0),
-(7, 'majobm@gmail.com', '7rex*KkX', 'Dos Pinos', 'Juan Viñas Costa Rica', '01-2145-2564', '2024-06-02', '7281-0534', 1, 1, 1);
+(6, 'majobm@gmail.com', '4i%UMS#r', 'Dos Pinos', 'Juan Viñas Costa Rica', '14-245-847798', '2024-06-10', '1457-9657', 1, 0, 0),
+(7, 'majobm@gmail.com', '7rex*KkX', 'Dos Pinos', 'Juan Viñas Costa Rica', '14-5748-8974', '2024-05-27', '7281-0534', 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -312,7 +330,10 @@ CREATE TABLE `promocion` (
 --
 
 INSERT INTO `promocion` (`id_Promocion`, `nombre`, `porcentaje`, `fechaInicio`, `fechaVencimiento`, `id_Cupon`, `activo`) VALUES
-(1, 'Promocion 1', 0.13, '2024-06-05', '2024-06-12', 1, 1);
+(1, 'Promocion 1', 0.13, '2024-06-05', '2024-06-12', 1, 1),
+(2, 'Promocion 1', 0.15, '2024-06-07', '2024-06-10', 14, 0),
+(3, 'Dos Pinos', 0.1, '2024-06-07', '2024-06-15', 14, 0),
+(4, 'Estandarizada', 0.15, '2024-06-09', '2024-06-21', 14, 0);
 
 --
 -- Índices para tablas volcadas
@@ -362,13 +383,13 @@ ALTER TABLE `administrador`
 -- AUTO_INCREMENT de la tabla `categoria`
 --
 ALTER TABLE `categoria`
-  MODIFY `id_Categoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_Categoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `cupon`
 --
 ALTER TABLE `cupon`
-  MODIFY `id_Cupon` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_Cupon` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT de la tabla `empresa`
@@ -380,7 +401,7 @@ ALTER TABLE `empresa`
 -- AUTO_INCREMENT de la tabla `promocion`
 --
 ALTER TABLE `promocion`
-  MODIFY `id_Promocion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_Promocion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
