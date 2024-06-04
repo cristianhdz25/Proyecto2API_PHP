@@ -20,4 +20,24 @@ class CategoriaBusiness
     {
         return $this->categoriaData->obtenerCategoriaPorId($id);
     }
+
+    public function insertarCategoria($categoria)
+    {
+        return $this->categoriaData->insertarCategoria($categoria);
+    }
+
+    public function obtenerCategoriasPorPagina($page)
+    {
+        return $this->categoriaData->obtenerCategoriasPorPagina($page);
+    }
+
+    public function obtenerTotalPaginasCategorias()
+    {
+        return $this->categoriaData->obtenerTotalPaginasCategorias();
+    }
+
+    public function actualizarEstadoCategoria($id, $estado)
+    {
+        return $this->categoriaData->actualizarEstadoCategoria($id, $estado);
+    }
 }

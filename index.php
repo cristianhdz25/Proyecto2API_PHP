@@ -81,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         echo json_encode($cupon);
         header("HTTP/1.1 200 OK");
         exit();
-    }else if ($endpoint == 'cupones' && isset($_GET['nombre'])) {
+    } else if ($endpoint == 'cupones' && isset($_GET['nombre'])) {
         require_once 'Controllers/CuponController.php';
         $nombre = $_GET['nombre'];
         $cuponController = new CuponController();
@@ -89,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         echo json_encode($cupon);
         header("HTTP/1.1 200 OK");
         exit();
-    }else if ($endpoint == 'cupones' && isset($_GET['idDetalles'])) {
+    } else if ($endpoint == 'cupones' && isset($_GET['idDetalles'])) {
         require_once 'Controllers/CuponController.php';
         $id = $_GET['idDetalles'];
         $cuponController = new CuponController();
@@ -113,6 +113,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $categoriaController = new CategoriaController();
         $categoria = $categoriaController->obtenerCategoriaPorId($id);
         echo json_encode($categoria);
+        header("HTTP/1.1 200 OK");
+        exit();
+    } else if
+    ($endpoint == 'categorias' && isset($_GET['page'])) {
+        require_once 'Controllers/CategoriaController.php';
+        $page = $_GET['page'];
+        $categoriaController = new CategoriaController();
+        $categorias = $categoriaController->obtenerCategoriasPorPagina($page);
+        echo json_encode($categorias);
+        header("HTTP/1.1 200 OK");
+        exit();
+    } else if ($endpoint == 'categorias' && isset($_GET['total'])) {
+        require_once 'Controllers/CategoriaController.php';
+        $categoriaController = new CategoriaController();
+        $categorias = $categoriaController->obtenerTotalPaginasCategorias();
+        echo json_encode($categorias);
         header("HTTP/1.1 200 OK");
         exit();
     } else if ($endpoint == 'categorias') {
@@ -214,6 +230,16 @@ if ($_POST['METHOD'] == 'POST') {
         header("HTTP/1.1 200 OK");
         exit();
     }
+
+    if ($endpoint == 'categorias') {
+        require_once 'Controllers/CategoriaController.php';
+        $nombre = $_POST['nombre'];
+        $categoriaController = new CategoriaController();
+        $resultado = $categoriaController->insertarCategoria($nombre);
+        echo json_encode($resultado);
+        header("HTTP/1.1 200 OK");
+        exit();
+    }
 }
 
 if ($_POST['METHOD'] == 'PUT') {
@@ -269,6 +295,28 @@ if ($_POST['METHOD'] == 'PUT') {
         header("HTTP/1.1 200 OK");
         exit();
     }
+
+    if ($endpoint == 'categorias' && isset($_POST['estado'])) {
+        require_once 'Controllers/CategoriaController.php';
+        $categoriaController = new CategoriaController();
+        $id = $_GET['id'];
+        $estado = $_POST['estado'];
+        $resultado = $categoriaController->actualizarEstadoCategoria($id, $estado);
+        echo json_encode($resultado);
+        header("HTTP/1.1 200 OK");
+        exit();
+    } else
+        if ($endpoint == 'categorias') {
+            require_once 'Controllers/CategoriaController.php';
+            $categoriaController = new CategoriaController();
+            $id = $_GET['id'];
+            $nombre = $_POST['nombre'];
+            $estado = $_POST['estado'];
+            $resultado = $categoriaController->actualizarCategoria($id, $nombre, $estado);
+            echo json_encode($resultado);
+            header("HTTP/1.1 200 OK");
+            exit();
+        }
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
