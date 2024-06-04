@@ -1,6 +1,6 @@
 <?php
 
-header("Access-Control-Allow-Origin: http://localhost:3000, http://localhost:5057/");
+header("Access-Control-Allow-Origin: http://localhost:3000");
 header("Access-Control-Allow-Methods: GET,POST,PUT, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
 
@@ -237,12 +237,12 @@ if ($_POST['METHOD'] == 'PUT') {
             $contrasenna = $_POST['contrasenna'];
             $telefono = $_POST['telefono'];
             $direccionFisica = $_POST['direccionFisica'];
-            $cedulaFisica = $_POST['cedulaFisica'];
             $cedula = $_POST['cedula'];
-            $fechaCreacion = $_POST['fechaCreacion'];
+            $cedulaTipo = $_POST['cedulaTipo'];
+            $fechaCreacion = sumarUnDia($_POST['fechaCreacion']);
             $primeraVez = $_POST['primeraVez'];
             $activo = $_POST['activo'];
-            $resultado = $empresaController->actualizarEmpresa($id, $nombre, $correo, $contrasenna, $telefono, $direccionFisica, $cedula, $fechaCreacion, $primeraVez, $activo, $cedulaFisica);
+            $resultado = $empresaController->actualizarEmpresa($id, $nombre, $correo, $contrasenna, $telefono, $direccionFisica, $cedula, $fechaCreacion, $primeraVez, $activo, $cedulaTipo);
             echo json_encode($resultado);
             header("HTTP/1.1 200 OK");
             exit();
