@@ -33,9 +33,9 @@ class CuponController
         return $this->cuponBusiness->obtenerCuponPorCategoria($idCategoria);
     }
 
-    public function registrarCupon($nombre, $imgUrl, $ubicacion, $precioBase, $fechaCreacion, $fechaInicio, $fechaVencimiento, $descripcion, $porcentaje, $id_Categoria, $id_Empresa)
+    public function registrarCupon($codigo,$nombre, $imgUrl, $ubicacion, $precioBase, $fechaCreacion, $fechaInicio, $fechaVencimiento, $descripcion, $porcentaje, $id_Categoria, $id_Empresa)
     {
-        $cupon = new Cupon(null, $nombre, $imgUrl, $ubicacion, $precioBase, $fechaCreacion, $fechaInicio, $fechaVencimiento, $descripcion, $porcentaje, 0, $id_Categoria, $id_Empresa);
+        $cupon = new Cupon(null, $codigo, $nombre, $imgUrl, $ubicacion, $precioBase, $fechaCreacion, $fechaInicio, $fechaVencimiento, $descripcion, $porcentaje, $id_Categoria, $id_Empresa, 0);
         return $this->cuponBusiness->registrarCupon($cupon);
     }
 
@@ -49,18 +49,24 @@ class CuponController
         return $this->cuponBusiness->obtenerTotalPaginasCuponesPorEmpresa($idEmpresa);
     }
 
-    public function actualizarCupon($id, $activo)
+    public function actualizarCupon($id, $codigo, $nombre, $imgUrl, $ubicacion, $precioBase, $fechaCreacion, $fechaInicio, $fechaVencimiento, $descripcion, $porcentaje, $id_Categoria, $id_Empresa, $activo)
     {
-
-        return $this->cuponBusiness->actualizarCupon($id, $activo);
+        $cupon = new Cupon($id, $codigo, $nombre, $imgUrl, $ubicacion, $precioBase, $fechaCreacion, $fechaInicio, $fechaVencimiento, $descripcion, $porcentaje, $id_Categoria, $id_Empresa, $activo);
+        return $this->cuponBusiness->actualizarCupon($cupon);
     }
 
-   public function obtenerCuponPorNombreCategoria($nombre)
+    public function actualizarEstadoCupon($id, $activo)
+    {
+
+        return $this->cuponBusiness->actualizarEstadoCupon($id, $activo);
+    }
+
+    public function obtenerCuponPorNombreCategoria($nombre)
     {
         return $this->cuponBusiness->obtenerCuponPorNombreCategoria($nombre);
     }
 
-  public function obtenerDetallesCupon($id)
+    public function obtenerDetallesCupon($id)
     {
         return $this->cuponBusiness->obtenerDetallesCupon($id);
     }

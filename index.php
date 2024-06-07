@@ -1,10 +1,10 @@
 <?php
 
-header("Access-Control-Allow-Origin: http://localhost:3000");
+header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET,POST,PUT, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
 
-date_default_timezone_set('America/Costa_Rica');
+//date_default_timezone_set('America/Costa_Rica');
 
 $endpoint = $_GET['endpoint'] ?? '';
 
@@ -54,8 +54,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $idEmpresa = $_GET['idEmpresa'];
         $page = $_GET['page'];
         $cuponController = new CuponController();
-        $cupon = $cuponController->obtenerCuponPorEmpresa($idEmpresa, $page);
-        echo json_encode($cupon);
+        $cuponData = $cuponController->obtenerCuponPorEmpresa($idEmpresa, $page);
+        echo json_encode($cuponData);
         header("HTTP/1.1 200 OK");
         exit();
     } else if ($endpoint == 'cupones' && isset($_GET['idEmpresa'])) {
@@ -97,14 +97,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         echo json_encode($cupon);
         header("HTTP/1.1 200 OK");
         exit();
-    } else if ($endpoint == 'cupones') {
-        require_once 'Controllers/CuponController.php';
-        $cuponController = new CuponController();
-        $cupones = $cuponController->obtenerCupones();
-        echo json_encode($cupones);
-        header("HTTP/1.1 200 OK");
-        exit();
     }
+    //  else if ($endpoint == 'cupones' ) {
+    //     require_once 'Controllers/CuponController.php';
+    //     $cuponController = new CuponController();
+    //     $cupones = $cuponController->obtenerCupones();
+    //     echo json_encode($cupones);
+    //     header("HTTP/1.1 200 OK");
+    //     exit();
+    // }
 
 
     if ($endpoint == 'categorias' && isset($_GET['id'])) {
@@ -200,6 +201,7 @@ if ($_POST['METHOD'] == 'POST') {
     if ($endpoint == 'cupones') {
         require_once 'Controllers/CuponController.php';
         $nombre = $_POST['nombre'];
+        $codigo = $_POST['codigo'];
         $imgUrl = $_POST['imgUrl'];
         $ubicacion = $_POST['ubicacion'];
         $precioBase = $_POST['precioBase'];
@@ -211,7 +213,7 @@ if ($_POST['METHOD'] == 'POST') {
         $id_Categoria = $_POST['id_Categoria'];
         $id_Empresa = $_POST['id_Empresa'];
         $cuponController = new CuponController();
-        $resultado = $cuponController->registrarCupon($nombre, $imgUrl, $ubicacion, $precioBase, $fechaCreacion, $fechaInicio, $fechaVencimiento, $descripcion, $porcentaje, $id_Categoria, $id_Empresa);
+        $resultado = $cuponController->registrarCupon( $codigo,$nombre,$imgUrl, $ubicacion, $precioBase, $fechaCreacion, $fechaInicio, $fechaVencimiento, $descripcion, $porcentaje, $id_Categoria, $id_Empresa);
         echo json_encode($resultado);
         header("HTTP/1.1 200 OK");
         exit();
@@ -253,37 +255,58 @@ if ($_POST['METHOD'] == 'PUT') {
         echo json_encode($resultado);
         header("HTTP/1.1 200 OK");
         exit();
-    } else
-        if ($endpoint == 'empresas') {
-            require_once 'Controllers/EmpresaController.php';
-            $empresaController = new EmpresaController();
-            $id = $_GET['id'];
-            $nombre = $_POST['nombre'];
-            $correo = $_POST['correo'];
-            $contrasenna = $_POST['contrasenna'];
-            $telefono = $_POST['telefono'];
-            $direccionFisica = $_POST['direccionFisica'];
-            $cedula = $_POST['cedula'];
-            $cedulaTipo = $_POST['cedulaTipo'];
-            $fechaCreacion = sumarUnDia($_POST['fechaCreacion']);
-            $primeraVez = $_POST['primeraVez'];
-            $activo = $_POST['activo'];
-            $resultado = $empresaController->actualizarEmpresa($id, $nombre, $correo, $contrasenna, $telefono, $direccionFisica, $cedula, $fechaCreacion, $primeraVez, $activo, $cedulaTipo);
-            echo json_encode($resultado);
-            header("HTTP/1.1 200 OK");
-            exit();
-        }
-
-    if ($endpoint == 'cupones') {
-        require_once 'Controllers/CuponController.php';
-        $cuponController = new CuponController();
+    } else if ($endpoint == 'empresas') {
+        require_once 'Controllers/EmpresaController.php';
+        $empresaController = new EmpresaController();
         $id = $_GET['id'];
+        $nombre = $_POST['nombre'];
+        $correo = $_POST['correo'];
+        $contrasenna = $_POST['contrasenna'];
+        $telefono = $_POST['telefono'];
+        $direccionFisica = $_POST['direccionFisica'];
+        $cedula = $_POST['cedula'];
+        $cedulaTipo = $_POST['cedulaTipo'];
+        $fechaCreacion = sumarUnDia($_POST['fechaCreacion']);
+        $primeraVez = $_POST['primeraVez'];
         $activo = $_POST['activo'];
-        $resultado = $cuponController->actualizarCupon($id, $activo);
+        $resultado = $empresaController->actualizarEmpresa($id, $nombre, $correo, $contrasenna, $telefono, $direccionFisica, $cedula, $fechaCreacion, $primeraVez, $activo, $cedulaTipo);
         echo json_encode($resultado);
         header("HTTP/1.1 200 OK");
         exit();
     }
+
+    if ($endpoint == 'cupones' && isset($_POST['codigo'])) {
+        require_once 'Controllers/CuponController.php';
+        $cuponController = new CuponController();
+        $id = $_GET['id'];
+        $codigo = $_POST['codigo'];
+        $nombre = $_POST['nombre'];
+        $imgUrl = $_POST['imgUrl'];
+        $ubicacion = $_POST['ubicacion'];
+        $precioBase = $_POST['precioBase'];
+        $fechaCreacion = sumarUnDia($_POST['fechaCreacion']);
+        $fechaInicio = sumarUnDia($_POST['fechaInicio']);
+        $fechaVencimiento = sumarUnDia($_POST['fechaVencimiento']);
+        $descripcion = $_POST['descripcion'];
+        $porcentaje = $_POST['porcentaje'];
+        $id_Categoria = $_POST['id_Categoria'];
+        $id_Empresa = $_POST['id_Empresa'];
+        $activo = $_POST['activo'];
+        $resultado = $cuponController->actualizarCupon($id, $codigo, $nombre, $imgUrl, $ubicacion, $precioBase, $fechaCreacion, $fechaInicio, $fechaVencimiento, $descripcion, $porcentaje, $id_Categoria, $id_Empresa, $activo);
+        echo json_encode($resultado);
+        header("HTTP/1.1 200 OK");
+        exit();
+    } else
+        if ($endpoint == 'cupones' && isset($_POST['activo'])) {
+            require_once 'Controllers/CuponController.php';
+            $cuponController = new CuponController();
+            $id = $_GET['id'];
+            $activo = $_POST['activo'];
+            $resultado = $cuponController->actualizarEstadoCupon($id, $activo);
+            echo json_encode($resultado);
+            header("HTTP/1.1 200 OK");
+            exit();
+        }
 
     if ($endpoint == 'promociones') {
         require_once 'Controllers/PromocionController.php';
@@ -305,18 +328,17 @@ if ($_POST['METHOD'] == 'PUT') {
         echo json_encode($resultado);
         header("HTTP/1.1 200 OK");
         exit();
-    } else
-        if ($endpoint == 'categorias') {
-            require_once 'Controllers/CategoriaController.php';
-            $categoriaController = new CategoriaController();
-            $id = $_GET['id'];
-            $nombre = $_POST['nombre'];
-            $estado = $_POST['estado'];
-            $resultado = $categoriaController->actualizarCategoria($id, $nombre, $estado);
-            echo json_encode($resultado);
-            header("HTTP/1.1 200 OK");
-            exit();
-        }
+    } else if ($endpoint == 'categorias') {
+        require_once 'Controllers/CategoriaController.php';
+        $categoriaController = new CategoriaController();
+        $id = $_GET['id'];
+        $nombre = $_POST['nombre'];
+        $estado = $_POST['estado'];
+        $resultado = $categoriaController->actualizarCategoria($id, $nombre, $estado);
+        echo json_encode($resultado);
+        header("HTTP/1.1 200 OK");
+        exit();
+    }
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {

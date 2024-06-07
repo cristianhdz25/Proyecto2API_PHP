@@ -1,6 +1,8 @@
 <?php
-class Cupon {
+class Cupon
+{
     private $id_Cupon;
+    private $codigo;
     private $nombre;
     private $imgUrl;
     private $ubicacion;
@@ -15,8 +17,10 @@ class Cupon {
     private $id_Empresa;
 
     // Constructor
-    public function __construct($id_Cupon, $nombre, $imgUrl, $ubicacion, $precioBase, $fechaCreacion, $fechaInicio, $fechaVencimiento, $descripcion, $porcentaje, $activo, $id_Categoria, $id_Empresa) {
+    public function __construct($id_Cupon, $codigo, $nombre, $imgUrl, $ubicacion, $precioBase, $fechaCreacion, $fechaInicio, $fechaVencimiento, $descripcion, $porcentaje, $id_Categoria, $id_Empresa, $activo)
+    {
         $this->id_Cupon = $id_Cupon;
+        $this->codigo = $codigo;
         $this->nombre = $nombre;
         $this->imgUrl = $imgUrl;
         $this->ubicacion = $ubicacion;
@@ -32,115 +36,151 @@ class Cupon {
     }
 
     // Getters
-    public function getId_Cupon() {
+    public function getId_Cupon()
+    {
         return $this->id_Cupon;
     }
 
-    public function getNombre() {
+    public function getCodigo()
+    {
+        return $this->codigo;
+    }
+
+    public function getNombre()
+    {
         return $this->nombre;
     }
 
-    public function getImgUrl() {
+    public function getImgUrl()
+    {
         return $this->imgUrl;
     }
 
-    public function getUbicacion() {
+    public function getUbicacion()
+    {
         return $this->ubicacion;
     }
 
-    public function getPrecioBase() {
+    public function getPrecioBase()
+    {
         return $this->precioBase;
     }
 
-    public function getFechaCreacion() {
+    public function getFechaCreacion()
+    {
         return $this->fechaCreacion;
     }
 
-    public function getFechaInicio() {
+    public function getFechaInicio()
+    {
         return $this->fechaInicio;
     }
 
-    public function getFechaVencimiento() {
+    public function getFechaVencimiento()
+    {
         return $this->fechaVencimiento;
     }
 
-    public function getDescripcion() {
+    public function getDescripcion()
+    {
         return $this->descripcion;
     }
 
-    public function getPorcentaje() {
+    public function getPorcentaje()
+    {
         return $this->porcentaje;
     }
 
-    public function getActivo() {
+    public function getActivo()
+    {
         return $this->activo;
     }
 
-    public function getCategoria() {
+    public function getCategoria()
+    {
         return $this->id_Categoria;
     }
 
-    public function getEmpresa() {
+    public function getEmpresa()
+    {
         return $this->id_Empresa;
     }
 
     // Setters
 
-    public function setId_Cupon($id_Cupon) {
+    public function setId_Cupon($id_Cupon)
+    {
         $this->id_Cupon = $id_Cupon;
     }
 
-    public function setNombre($nombre) {
+    public function setCodigo($codigo)
+    {
+        $this->codigo = $codigo;
+    }
+
+    public function setNombre($nombre)
+    {
         $this->nombre = $nombre;
     }
 
-    public function setImgUrl($imgUrl) {
+    public function setImgUrl($imgUrl)
+    {
         $this->imgUrl = $imgUrl;
     }
 
-    public function setUbicacion($ubicacion) {
+    public function setUbicacion($ubicacion)
+    {
         $this->ubicacion = $ubicacion;
     }
 
-    public function setPrecioBase($precioBase) {
+    public function setPrecioBase($precioBase)
+    {
         $this->precioBase = $precioBase;
     }
 
-    public function setFechaCreacion($fechaCreacion) {
+    public function setFechaCreacion($fechaCreacion)
+    {
         $this->fechaCreacion = $fechaCreacion;
     }
 
-    public function setFechaInicio($fechaInicio) {
+    public function setFechaInicio($fechaInicio)
+    {
         $this->fechaInicio = $fechaInicio;
     }
 
-    public function setFechaVencimiento($fechaVencimiento) {
+    public function setFechaVencimiento($fechaVencimiento)
+    {
         $this->fechaVencimiento = $fechaVencimiento;
     }
 
-    public function setDescripcion($descripcion) {
+    public function setDescripcion($descripcion)
+    {
         $this->descripcion = $descripcion;
     }
 
-    public function setPorcentaje($porcentaje) {
+    public function setPorcentaje($porcentaje)
+    {
         $this->porcentaje = $porcentaje;
     }
 
-    public function setActivo($activo) {
+    public function setActivo($activo)
+    {
         $this->activo = $activo;
     }
 
-    public function setCategoria($id_Categoria) {
+    public function setCategoria($id_Categoria)
+    {
         $this->id_Categoria = $id_Categoria;
     }
 
-    public function setEmpresa($id_Empresa) {
+    public function setEmpresa($id_Empresa)
+    {
         $this->id_Empresa = $id_Empresa;
     }
 
-    
 
-    
+
+
 }
 
 
