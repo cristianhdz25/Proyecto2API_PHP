@@ -53,7 +53,7 @@ class PromocionData
         return $resultado->fetchAll();
     }
 
-    function actualizarPromocion($id, $activo)
+    function actualizarEstadoPromocion($id, $activo)
     {
         // Primero, coloca todas las promociones en 0
         $queryReset = "UPDATE promocion SET activo='0'";
@@ -69,6 +69,19 @@ class PromocionData
         $resultadoUpdate = metodoPut($queryUpdate);
 
         return $resultadoUpdate;
+    }
+
+    public function actualizarPromocion ($promocion){
+        $id = $promocion->getId();
+        $porcentaje = $promocion->getPorcentaje();
+        $nombre = $promocion->getNombre();
+        $fechaInicio = $promocion->getFechaInicio();
+        $fechaVencimiento = $promocion->getFechaVencimiento();
+        $idCupon = $promocion->getId_Cupon();
+        $activo = $promocion->getActivo();
+        $query = "UPDATE promocion SET nombre='$nombre', porcentaje='$porcentaje', fechaInicio='$fechaInicio', fechaVencimiento='$fechaVencimiento', id_Cupon='$idCupon', activo='$activo' WHERE id_Promocion='$id'";
+        $resultado = metodoPut($query);
+        return $resultado;
     }
 
 

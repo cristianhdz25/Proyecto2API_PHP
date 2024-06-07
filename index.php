@@ -213,7 +213,7 @@ if ($_POST['METHOD'] == 'POST') {
         $id_Categoria = $_POST['id_Categoria'];
         $id_Empresa = $_POST['id_Empresa'];
         $cuponController = new CuponController();
-        $resultado = $cuponController->registrarCupon( $codigo,$nombre,$imgUrl, $ubicacion, $precioBase, $fechaCreacion, $fechaInicio, $fechaVencimiento, $descripcion, $porcentaje, $id_Categoria, $id_Empresa);
+        $resultado = $cuponController->registrarCupon($codigo, $nombre, $imgUrl, $ubicacion, $precioBase, $fechaCreacion, $fechaInicio, $fechaVencimiento, $descripcion, $porcentaje, $id_Categoria, $id_Empresa);
         echo json_encode($resultado);
         header("HTTP/1.1 200 OK");
         exit();
@@ -308,12 +308,27 @@ if ($_POST['METHOD'] == 'PUT') {
             exit();
         }
 
-    if ($endpoint == 'promociones') {
+
+    if ($endpoint == 'promociones' && isset($_POST['nombre'])) {
+        require_once 'Controllers/PromocionController.php';
+        $promocionController = new PromocionController();
+        $id = $_GET['id'];
+        $nombre = $_POST['nombre'];
+        $porcentaje = $_POST['porcentaje'];
+        $fechaInicio = sumarUnDia($_POST['fechaInicio']);
+        $fechaVencimiento = sumarUnDia($_POST['fechaVencimiento']);
+        $idCupon = $_POST['idCupon'];
+        $activo = $_POST['activo'];
+        $resultado = $promocionController->actualizarPromocion($id, $nombre, $porcentaje, $fechaInicio, $fechaVencimiento, $idCupon, $activo);
+        echo json_encode($resultado);
+        header("HTTP/1.1 200 OK");
+        exit();
+    } else if ($endpoint == 'promociones' && isset($_POST['activo'])) {
         require_once 'Controllers/PromocionController.php';
         $promocionController = new PromocionController();
         $id = $_GET['id'];
         $activo = $_POST['activo'];
-        $resultado = $promocionController->actualizarPromocion($id, $activo);
+        $resultado = $promocionController->actualizarEstadoPromocion($id, $activo);
         echo json_encode($resultado);
         header("HTTP/1.1 200 OK");
         exit();
@@ -333,8 +348,7 @@ if ($_POST['METHOD'] == 'PUT') {
         $categoriaController = new CategoriaController();
         $id = $_GET['id'];
         $nombre = $_POST['nombre'];
-        $estado = $_POST['estado'];
-        $resultado = $categoriaController->actualizarCategoria($id, $nombre, $estado);
+        $resultado = $categoriaController->actualizarCategoria($id, $nombre);
         echo json_encode($resultado);
         header("HTTP/1.1 200 OK");
         exit();

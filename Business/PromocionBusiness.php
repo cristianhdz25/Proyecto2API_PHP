@@ -32,8 +32,12 @@ class PromocionBusiness {
         return $this->promocionData->registrarPromocion($promocion);
     }
 
-    public function actualizarPromocion($id, $activo) {
-        return $this->promocionData->actualizarPromocion($id, $activo);
+    public function actualizarEstadoPromocion($id, $activo) {
+        return $this->promocionData->actualizarEstadoPromocion($id, $activo);
+    }
+
+    public function actualizarPromocion($promocion) {
+        return $this->promocionData->actualizarPromocion($promocion);
     }
 
 
