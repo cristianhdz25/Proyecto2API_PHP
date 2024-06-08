@@ -190,7 +190,7 @@ if ($_POST['METHOD'] == 'POST') {
         $direccionFisica = $_POST['direccionFisica'];
         $cedula = $_POST['cedula'];
         $cedulaTipo = $_POST['cedulaTipo'];
-        $fechaCreacion = sumarUnDia($_POST['fechaCreacion']);
+        $fechaCreacion = ($_POST['fechaCreacion']);
         $empresaController = new EmpresaController();
         $resultado = $empresaController->registrarEmpresa($nombre, $correo, $contrasenna, $telefono, $direccionFisica, $cedula, $fechaCreacion, $cedulaTipo);
         echo json_encode($resultado);
@@ -205,9 +205,9 @@ if ($_POST['METHOD'] == 'POST') {
         $imgUrl = $_POST['imgUrl'];
         $ubicacion = $_POST['ubicacion'];
         $precioBase = $_POST['precioBase'];
-        $fechaCreacion = sumarUnDia($_POST['fechaCreacion']);
-        $fechaInicio = sumarUnDia($_POST['fechaInicio']);
-        $fechaVencimiento = sumarUnDia($_POST['fechaVencimiento']);
+        $fechaCreacion = ($_POST['fechaCreacion']);
+        $fechaInicio = ($_POST['fechaInicio']);
+        $fechaVencimiento = ($_POST['fechaVencimiento']);
         $descripcion = $_POST['descripcion'];
         $porcentaje = $_POST['porcentaje'];
         $id_Categoria = $_POST['id_Categoria'];
@@ -223,8 +223,8 @@ if ($_POST['METHOD'] == 'POST') {
         require_once 'Controllers/PromocionController.php';
         $nombre = $_POST['nombre'];
         $porcentaje = $_POST['porcentaje'];
-        $fechaInicio = sumarUnDia($_POST['fechaInicio']);
-        $fechaVencimiento = sumarUnDia($_POST['fechaVencimiento']);
+        $fechaInicio = ($_POST['fechaInicio']);
+        $fechaVencimiento = ($_POST['fechaVencimiento']);
         $idCupon = $_POST['idCupon'];
         $promocionController = new PromocionController();
         $resultado = $promocionController->registrarPromocion($nombre, $porcentaje, $fechaInicio, $fechaVencimiento, $idCupon);
@@ -284,9 +284,9 @@ if ($_POST['METHOD'] == 'PUT') {
         $imgUrl = $_POST['imgUrl'];
         $ubicacion = $_POST['ubicacion'];
         $precioBase = $_POST['precioBase'];
-        $fechaCreacion = sumarUnDia($_POST['fechaCreacion']);
-        $fechaInicio = sumarUnDia($_POST['fechaInicio']);
-        $fechaVencimiento = sumarUnDia($_POST['fechaVencimiento']);
+        $fechaCreacion = ($_POST['fechaCreacion']);
+        $fechaInicio = ($_POST['fechaInicio']);
+        $fechaVencimiento = ($_POST['fechaVencimiento']);
         $descripcion = $_POST['descripcion'];
         $porcentaje = $_POST['porcentaje'];
         $id_Categoria = $_POST['id_Categoria'];
@@ -315,8 +315,8 @@ if ($_POST['METHOD'] == 'PUT') {
         $id = $_GET['id'];
         $nombre = $_POST['nombre'];
         $porcentaje = $_POST['porcentaje'];
-        $fechaInicio = sumarUnDia($_POST['fechaInicio']);
-        $fechaVencimiento = sumarUnDia($_POST['fechaVencimiento']);
+        $fechaInicio = ($_POST['fechaInicio']);
+        $fechaVencimiento =($_POST['fechaVencimiento']);
         $idCupon = $_POST['idCupon'];
         $activo = $_POST['activo'];
         $resultado = $promocionController->actualizarPromocion($id, $nombre, $porcentaje, $fechaInicio, $fechaVencimiento, $idCupon, $activo);

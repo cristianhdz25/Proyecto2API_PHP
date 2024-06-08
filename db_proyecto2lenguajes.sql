@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost:3307
--- Tiempo de generación: 04-06-2024 a las 05:38:21
+-- Tiempo de generación: 08-06-2024 a las 23:20:19
 -- Versión del servidor: 10.4.27-MariaDB
 -- Versión de PHP: 8.0.25
 
@@ -27,6 +27,24 @@ DELIMITER $$
 --
 -- Procedimientos
 --
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_actualizar_cupon` (IN `_id` INT, IN `_codigo` VARCHAR(500), IN `_nombre` VARCHAR(500), IN `_imgUrl` VARCHAR(500), IN `_ubicacion` VARCHAR(500), IN `_precioBase` INT, IN `_fechaCreacion` DATE, IN `_fechaInicio` DATE, IN `_fechaVencimiento` DATE, IN `_descripcion` VARCHAR(500), IN `_porcentaje` DOUBLE, IN `_id_Categoria` INT, IN `_id_Empresa` INT, IN `_activo` BOOLEAN)   update cupon set 
+nombre=_nombre,
+codigo = _codigo,
+imgUrl=_imgUrl,
+ubicacion=_ubicacion,
+precioBase=_precioBase,
+fechaCreacion=_fechaCreacion,
+fechaInicio=_fechaInicio,
+fechaVencimiento=_fechaVencimiento,
+descripcion=_descripcion,
+porcentaje=_porcentaje,
+id_Categoria=_id_Categoria,
+id_Empresa=_id_Empresa,
+activo=_activo 
+where id_Cupon=_id$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_actualizar_estado_cupon` (IN `_id` INT, IN `_activo` BOOLEAN)   update cupon set activo=_activo where id_Cupon=_id$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_get_admin_by_usuario_contrasenna` (IN `_usuario` VARCHAR(255), IN `_contrasenna` VARCHAR(255))   SELECT id_Admin
 FROM administrador
 WHERE _usuario LIKE usuario
@@ -193,6 +211,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_obtener_cupones_por_id_categoria
         AND cupon.activo = 1;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_registrar_cupon` (IN `_codigo` VARCHAR(255), IN `_nombre` VARCHAR(255), IN `_imgUrl` VARCHAR(255), IN `_ubicacion` VARCHAR(500), IN `_precioBase` INT, IN `_fechaCreacion` DATE, IN `_fechaInicio` DATE, IN `_fechaVencimiento` DATE, IN `_descripcion` VARCHAR(500), IN `_porcentaje` DOUBLE, IN `_id_Categoria` INT, IN `_id_Empresa` INT, IN `_activo` BOOLEAN)   insert into cupon (codigo,nombre, imgUrl, ubicacion, precioBase, fechaCreacion, fechaInicio, fechaVencimiento, descripcion, porcentaje, id_Categoria, id_Empresa, activo) values (_codigo,_nombre,_imgUrl,_ubicacion,_precioBase,_fechaCreacion,_fechaInicio,_fechaVencimiento,_descripcion,_porcentaje,_id_Categoria,_id_Empresa,_activo)$$
+
 DELIMITER ;
 
 -- --------------------------------------------------------
@@ -242,6 +262,7 @@ INSERT INTO `categoria` (`id_Categoria`, `nombre`, `estado`) VALUES
 
 CREATE TABLE `cupon` (
   `id_Cupon` int(11) NOT NULL,
+  `codigo` varchar(20) NOT NULL,
   `nombre` varchar(150) NOT NULL,
   `imgUrl` varchar(500) NOT NULL,
   `precioBase` double NOT NULL,
@@ -260,21 +281,9 @@ CREATE TABLE `cupon` (
 -- Volcado de datos para la tabla `cupon`
 --
 
-INSERT INTO `cupon` (`id_Cupon`, `nombre`, `imgUrl`, `precioBase`, `id_Categoria`, `fechaCreacion`, `fechaInicio`, `fechaVencimiento`, `descripcion`, `activo`, `porcentaje`, `ubicacion`, `id_Empresa`) VALUES
-(1, 'Descuento', 'http://localhost/Proyecto2_APIImages_PHP/img/Gojo ;c.png', 20000, 1, '2024-06-03', '2024-06-04', '2024-06-29', 'Cupon de descuento ', 1, 0.25, 'Costa Rica', 1),
-(2, 'Estandarizada', 'http://localhost/Proyecto2_APIImages_PHP/img/Screenshot%202023-04-03%20131525.png', 1500, 1, '2024-06-03', '2024-06-04', '2024-06-30', 'Cupon de descuento ', 0, 0.15, 'Costa Rica', 1),
-(3, 'Dos Pinos', 'http://localhost/Proyecto2_APIImages_PHP/img/Gojo ;c.png', 20000, 1, '2024-06-03', '2024-06-04', '2024-06-28', 'Cupon de descuento ', 0, 0.05, 'Costa Rica', 1),
-(4, 'Cristian', 'http://localhost/Proyecto2_APIImages_PHP/img/Gojo ;c.png', 20000, 1, '2024-06-03', '2024-06-04', '2024-06-27', 'Cupon de descuento ', 0, 0.35, 'Costa Rica', 1),
-(5, 'Dos Pinos', 'http://localhost/Proyecto2_APIImages_PHP/img/rick-morty.png', 30000, 1, '2024-06-03', '2024-06-05', '2024-06-29', 'Cupon de descuento ', 1, 0.17, 'Costa Rica', 1),
-(6, 'Cristian', 'http://localhost/Proyecto2_APIImages_PHP/img/rick-morty.png', 20000, 1, '2024-06-03', '2024-06-05', '2024-06-26', 'Cupon de descuento ', 0, 0.28, 'Costa Rica', 1),
-(7, 'Cristian', 'http://localhost/Proyecto2_APIImages_PHP/img/rick-morty.png', 20000, 1, '2024-06-03', '2024-06-05', '2024-06-27', 'Cupon de descuento ', 0, 0.14, 'CR', 1),
-(8, 'Dos Pinos', 'null', 20000, 1, '2024-06-03', '2024-06-04', '2024-06-24', 'Cupon de descuento', 0, 0.15, 'Costa Rica', 1),
-(9, 'Prueba', 'http://localhost/Proyecto2_APIImages_PHP/img/stretched-1920-1080-1342982.jpeg', 20000, 1, '2024-06-04', '2024-06-05', '2024-06-30', 'Cupon de descuento', 0, 0.3, 'Costa Rica', 1),
-(10, 'Dos Pinos', 'http://localhost/Proyecto2_APIImages_PHP/img/stretched-1920-1080-1342982.jpeg', 20000, 1, '2024-06-04', '2024-06-05', '2024-06-30', 'Descuento', 0, 0.22, 'Costa Rica', 1),
-(11, 'Cristian', 'http://localhost/Proyecto2_APIImages_PHP/img/stretched-1920-1080-1342982.jpeg', 20000, 1, '2024-06-04', '2024-06-06', '2024-06-30', 'Cupon de descuento', 0, 0.25, 'Costa', 1),
-(12, 'Estandarizada', 'null', 20000, 1, '2024-06-04', '2024-06-07', '2024-06-15', 'Cupon de descuento', 0, 0.15, 'Costa Rica', 1),
-(13, 'Estandarizada', 'http://localhost/Proyecto2_APIImages_PHP/img/stretched-1920-1080-1342982.jpeg', 12000, 1, '2024-06-04', '2024-06-06', '2024-06-23', 'CUpon', 0, 0.14, 'Costa', 1),
-(14, 'Estandarizada', 'http://localhost/Proyecto2_APIImages_PHP/img/stretched-1920-1080-1342982.jpeg', 12222, 1, '2024-06-04', '2024-06-06', '2024-06-22', 'Cupon', 0, 0.15, 'Costa Rica', 1);
+INSERT INTO `cupon` (`id_Cupon`, `codigo`, `nombre`, `imgUrl`, `precioBase`, `id_Categoria`, `fechaCreacion`, `fechaInicio`, `fechaVencimiento`, `descripcion`, `activo`, `porcentaje`, `ubicacion`, `id_Empresa`) VALUES
+(1, 'CUP-02', 'Cristian', 'http://localhost/Proyecto2_APIImages_PHP/img/rick-morty.png', 20000, 2, '2024-06-09', '2024-06-11', '2024-07-01', 'Cupon de descuento 2', 0, 0.15, 'Costa Rica', 1),
+(2, 'CUP-04', 'Dos Pinos', 'http://localhost/Proyecto2_APIImages_PHP/img/coctel-sexo-en-la-playa-sex.jpg', 20000, 2, '2024-06-08', '2024-06-09', '2024-06-15', 'Cupon de descuento', 0, 0.15, 'Costa Rica', 1);
 
 -- --------------------------------------------------------
 
@@ -307,7 +316,8 @@ INSERT INTO `empresa` (`id`, `correo`, `contrasenna`, `nombre`, `direccionFisica
 (4, 'rolo@gmail.com', '&Eh*Yy2G', 'Prueba', 'Los Alpes', '01-0254-7874', '2024-06-02', '4785-4785', 1, 0, 1),
 (5, 'rolo@gmail.com', 'Fs.^x21&', 'Prueba', 'Juan Viñas Costa Rica', '01-2545-1578', '2024-06-01', '7598-6584', 1, 1, 1),
 (6, 'majobm@gmail.com', '4i%UMS#r', 'Dos Pinos', 'Juan Viñas Costa Rica', '14-245-847798', '2024-06-10', '1457-9657', 1, 0, 0),
-(7, 'majobm@gmail.com', '7rex*KkX', 'Dos Pinos', 'Juan Viñas Costa Rica', '14-5748-8974', '2024-05-27', '7281-0534', 1, 1, 1);
+(7, 'majobm@gmail.com', '7rex*KkX', 'Dos Pinos', 'Juan Viñas Costa Rica', '14-5748-8974', '2024-05-27', '7281-0534', 1, 1, 1),
+(8, 'daylan@gmail.com', 'NAx7@8#R', 'Daylan', 'Juan Viñas Costa Rica', '01-2145-2564', '2024-02-06', '4579-4784', 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -330,10 +340,7 @@ CREATE TABLE `promocion` (
 --
 
 INSERT INTO `promocion` (`id_Promocion`, `nombre`, `porcentaje`, `fechaInicio`, `fechaVencimiento`, `id_Cupon`, `activo`) VALUES
-(1, 'Promocion 1', 0.13, '2024-06-05', '2024-06-12', 1, 1),
-(2, 'Promocion 1', 0.15, '2024-06-07', '2024-06-10', 14, 0),
-(3, 'Dos Pinos', 0.1, '2024-06-07', '2024-06-15', 14, 0),
-(4, 'Estandarizada', 0.15, '2024-06-09', '2024-06-21', 14, 0);
+(1, 'Dos Pinos 3', 0.25, '2024-06-15', '2024-06-30', 1, 0);
 
 --
 -- Índices para tablas volcadas
@@ -389,19 +396,19 @@ ALTER TABLE `categoria`
 -- AUTO_INCREMENT de la tabla `cupon`
 --
 ALTER TABLE `cupon`
-  MODIFY `id_Cupon` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id_Cupon` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `empresa`
 --
 ALTER TABLE `empresa`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `promocion`
 --
 ALTER TABLE `promocion`
-  MODIFY `id_Promocion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_Promocion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
