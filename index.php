@@ -32,7 +32,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         echo json_encode($empresas);
         header("HTTP/1.1 200 OK");
         exit();
-    } else if ($endpoint == 'empresas') {
+    } else if ($endpoint == 'empresas' && isset($GET['correo']) && isset($GET['$contrasenna'])){
+        require_once 'Controllers/EmpresaController.php';
+        $correo = $_GET['correo'];
+        $contrasenna = $_GET['contrasenna'];
+        $empresaController = new EmpresaController();
+        $empresa = $empresaController->obtenerEmpresaPorCorreoYContrasenna($correo, $contrasenna);
+        echo json_encode($empresa);
+        header("HTTP/1.1 200 OK");
+        exit();
+    }
+    else if ($endpoint == 'empresas') {
         require_once 'Controllers/EmpresaController.php';
         $empresaController = new EmpresaController();
         $empresas = $empresaController->obtenerEmpresas();
@@ -269,7 +279,18 @@ if ($_POST['METHOD'] == 'PUT') {
         echo json_encode($resultado);
         header("HTTP/1.1 200 OK");
         exit();
-    } else if ($endpoint == 'empresas') {
+    }  else   if ($endpoint == 'empresas' && isset($_POST['contrasenna']) && isset($_GET['primeraVez'])) {
+        require_once 'Controllers/EmpresaController.php';
+        $empresaController = new EmpresaController();
+        $id = $_GET['id'];
+        $contrasenna = $_POST['contrasenna'];
+        $resultado = $empresaController->actualizarContrasennaEmpresa($id, $contrasenna);
+        echo json_encode($resultado);
+        header("HTTP/1.1 200 OK");
+        exit();
+    }
+    
+    else if ($endpoint == 'empresas') {
         require_once 'Controllers/EmpresaController.php';
         $empresaController = new EmpresaController();
         $id = $_GET['id'];

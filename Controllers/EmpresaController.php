@@ -32,6 +32,10 @@ class EmpresaController {
         return $this->empresaBusiness->obtenerEmpresasPorPagina($page);
     }
 
+    public function obtenerEmpresaPorCorreoYContrasenna($correo, $contrasenna) {
+        return $this->empresaBusiness->obtenerEmpresaPorCorreoYContrasenna($correo, $contrasenna);
+    }
+
     public function actualizarEmpresa($id, $nombre, $correo, $contrasenna, $telefono, $direccionFisica, $cedula, $fechaCreacion, $primeraVez, $activo , $cedulaTipo) {
         $empresa = new Empresa($id, $nombre, $correo, $contrasenna, $telefono, $direccionFisica, $cedula, $fechaCreacion, $primeraVez, $activo , $cedulaTipo);
         return $this->empresaBusiness->actualizarEmpresa($empresa);
@@ -39,5 +43,9 @@ class EmpresaController {
 
     public function actualizarEstadoEmpresa($id, $estado) {
         return $this->empresaBusiness->actualizarEstadoEmpresa($id, $estado);
+    }
+
+    public function actualizarContrasennaEmpresa($id, $contrasenna) {
+        return $this->empresaBusiness->actualizarContrasennaEmpresa($id, $contrasenna);
     }
 }

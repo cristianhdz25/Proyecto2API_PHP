@@ -30,6 +30,10 @@ class EmpresaBusiness   {
         return $this->empresaData->actualizarEstadoEmpresa($id, $estado);
     }
 
+    public function actualizarContrasennaEmpresa($id, $contrasenna) {
+        return $this->empresaData->actualizarContrasennaEmpresa($id, $contrasenna);
+    }
+
     public function obtenerTotalPaginasEmpresas() {
         return $this->empresaData->obtenerTotalPaginasEmpresas();
     }

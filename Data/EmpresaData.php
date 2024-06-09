@@ -16,6 +16,13 @@ class EmpresaData
         return $resultado->fetchAll();
     }
 
+    function obtenerEmpresaPorCorreoYContrasenna($correo, $contrasenna)
+    {
+        $query = "select * from empresa where correo='$correo' and contrasenna='$contrasenna'";
+        $resultado = metodoGet($query);
+        return $resultado->fetchAll();
+    }
+
     function obtenerTotalPaginasEmpresas()
     {
         $query = "CALL sp_get_totalPages_empresas()";
@@ -69,6 +76,13 @@ class EmpresaData
     function actualizarEstadoEmpresa($id, $estado)
     {
         $query = "UPDATE empresa SET activo='$estado' WHERE id='$id'";
+        $resultado = metodoPut($query);
+        return $resultado;
+    }
+
+    function actualizarContrasennaEmpresa($id, $contrasenna)
+    {
+        $query = "UPDATE empresa SET contrasenna='$contrasenna', primeraVez='0' WHERE id='$id'";
         $resultado = metodoPut($query);
         return $resultado;
     }
