@@ -32,6 +32,12 @@ class PromocionData
         return $resultado->fetchAll();
     }
 
+    function obtenerTodasLasPromocionesPorCupon( $id) {
+        $query = "CALL sp_obtener_todas_las_promociones_por_cupon(". $id . ")";
+        $resultado = metodoGet($query);
+        return $resultado->fetchAll();
+    }
+
     function registrarPromocion($promocion)
     {
         $porcentaje = $promocion->getPorcentaje();

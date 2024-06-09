@@ -49,6 +49,8 @@ class CuponController
         return $this->cuponBusiness->obtenerTotalPaginasCuponesPorEmpresa($idEmpresa);
     }
 
+
+
     public function actualizarCupon($id, $codigo, $nombre, $imgUrl, $ubicacion, $precioBase, $fechaCreacion, $fechaInicio, $fechaVencimiento, $descripcion, $porcentaje, $id_Categoria, $id_Empresa, $activo)
     {
         $cupon = new Cupon($id, $codigo, $nombre, $imgUrl, $ubicacion, $precioBase, $fechaCreacion, $fechaInicio, $fechaVencimiento, $descripcion, $porcentaje, $id_Categoria, $id_Empresa, $activo);

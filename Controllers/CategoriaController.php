@@ -25,6 +25,11 @@ class CategoriaController{
         return $this->categoriaBusiness->obtenerTotalPaginasCategorias();
     }
 
+    public function actualizarCategoria($id, $nombre, $estado){
+        $categoria = new Categoria($id, $nombre, $estado);
+        return $this->categoriaBusiness->actualizarCategoria($categoria);
+    }
+
 
     public function insertarCategoria($nombre){
         $categoria = new Categoria(null, $nombre, 1);

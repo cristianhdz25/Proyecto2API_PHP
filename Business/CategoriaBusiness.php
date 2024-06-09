@@ -40,4 +40,9 @@ class CategoriaBusiness
     {
         return $this->categoriaData->actualizarEstadoCategoria($id, $estado);
     }
+
+    public function actualizarCategoria($categoria)
+    {
+        return $this->categoriaData->actualizarCategoria($categoria);
+    }
 }

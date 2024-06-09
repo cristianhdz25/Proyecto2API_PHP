@@ -69,6 +69,7 @@ class CuponData
         $resultado = metodoPost($query, $queryAutoIncrement);
         return $resultado;
     }
+    
 
     function actualizarEstadoCupon($id, $activo)
     {

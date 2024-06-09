@@ -29,6 +29,11 @@ class PromocionController
         return $this->promocionBusiness->obtenerPromocionesPorCupon($idCupon, $page);
     }
 
+    public function obtenerTodasLasPromocionesPorCupon($id)
+    {
+        return $this->promocionBusiness->obtenerTodasLasPromocionesPorCupon($id);
+    }
+
     public function obtenerTotalPaginasPromocionesPorCupon($idCupon)
     {
         return $this->promocionBusiness->obtenerTotalPaginasPromocionesPorCupon($idCupon);

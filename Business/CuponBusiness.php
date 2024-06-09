@@ -46,6 +46,7 @@ class CuponBusiness
         return $this->cuponData->obtenerTotalPaginasCuponesPorEmpresa($idEmpresa);
     }
 
+
     public function actualizarCupon($cupon)
     {
         return $this->cuponData->actualizarCupon($cupon);

@@ -50,4 +50,14 @@ class CategoriaData
         return $resultado;
     }
 
+    function actualizarCategoria($categoria)
+    {
+        $id = $categoria->getId();
+        $nombre = $categoria->getNombre();
+        $estado = $categoria->getEstado();
+        $query = "update categoria set nombre='$nombre', estado='$estado' where id_Categoria='$id'";
+        $resultado = metodoPut($query);
+        return $resultado;
+    }
+
 }

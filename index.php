@@ -151,6 +151,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         echo json_encode($promocion);
         header("HTTP/1.1 200 OK");
         exit();
+    } else if ($endpoint == 'promociones' && isset($_GET['fechaInicio']) && isset($_GET['fechaVencimiento']) && isset($_GET['idCupon'])) {
+        require_once 'Controllers/PromocionController.php';
+        $id = $_GET['idCupon'];
+        $fechaInicio = $_GET['fechaInicio'];
+        $fechaVencimiento = $_GET['fechaVencimiento'];
+        $promocionController = new PromocionController();
+        $promociones = $promocionController->obtenerTodasLasPromocionesPorCupon($id);
+        echo json_encode($promociones);
+        header("HTTP/1.1 200 OK");
+        exit();
     } else if ($endpoint == 'promociones' && isset($_GET['idCupon'])) {
         require_once 'Controllers/PromocionController.php';
         $idCupon = $_GET['idCupon'];
@@ -159,14 +169,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         echo json_encode($promocion);
         header("HTTP/1.1 200 OK");
         exit();
-    } else if ($endpoint == 'promociones') {
-        require_once 'Controllers/PromocionController.php';
-        $promocionController = new PromocionController();
-        $promociones = $promocionController->obtenerPromociones();
-        echo json_encode($promociones);
-        header("HTTP/1.1 200 OK");
-        exit();
     }
+
+
+    // if ($endpoint == 'promociones') {
+    //     require_once 'Controllers/PromocionController.php';
+    //     $promocionController = new PromocionController();
+    //     $promociones = $promocionController->obtenerPromociones();
+    //     echo json_encode($promociones);
+    //     header("HTTP/1.1 200 OK");
+    //     exit();
+    // }
+
 
     if ($endpoint == 'admin' && isset($_GET['usuario']) && isset($_GET['contrasenna'])) {
         require_once 'Controllers/AdministradorController.php';
@@ -205,9 +219,9 @@ if ($_POST['METHOD'] == 'POST') {
         $imgUrl = $_POST['imgUrl'];
         $ubicacion = $_POST['ubicacion'];
         $precioBase = $_POST['precioBase'];
-        $fechaCreacion = ($_POST['fechaCreacion']);
-        $fechaInicio = ($_POST['fechaInicio']);
-        $fechaVencimiento = ($_POST['fechaVencimiento']);
+        $fechaCreacion = $_POST['fechaCreacion'];
+        $fechaInicio = $_POST['fechaInicio'];
+        $fechaVencimiento = $_POST['fechaVencimiento'];
         $descripcion = $_POST['descripcion'];
         $porcentaje = $_POST['porcentaje'];
         $id_Categoria = $_POST['id_Categoria'];
@@ -266,7 +280,7 @@ if ($_POST['METHOD'] == 'PUT') {
         $direccionFisica = $_POST['direccionFisica'];
         $cedula = $_POST['cedula'];
         $cedulaTipo = $_POST['cedulaTipo'];
-        $fechaCreacion = sumarUnDia($_POST['fechaCreacion']);
+        $fechaCreacion = $_POST['fechaCreacion'];
         $primeraVez = $_POST['primeraVez'];
         $activo = $_POST['activo'];
         $resultado = $empresaController->actualizarEmpresa($id, $nombre, $correo, $contrasenna, $telefono, $direccionFisica, $cedula, $fechaCreacion, $primeraVez, $activo, $cedulaTipo);
@@ -316,7 +330,7 @@ if ($_POST['METHOD'] == 'PUT') {
         $nombre = $_POST['nombre'];
         $porcentaje = $_POST['porcentaje'];
         $fechaInicio = ($_POST['fechaInicio']);
-        $fechaVencimiento =($_POST['fechaVencimiento']);
+        $fechaVencimiento = ($_POST['fechaVencimiento']);
         $idCupon = $_POST['idCupon'];
         $activo = $_POST['activo'];
         $resultado = $promocionController->actualizarPromocion($id, $nombre, $porcentaje, $fechaInicio, $fechaVencimiento, $idCupon, $activo);
@@ -334,6 +348,18 @@ if ($_POST['METHOD'] == 'PUT') {
         exit();
     }
 
+}
+if ($endpoint == 'categorias') {
+    require_once 'Controllers/CategoriaController.php';
+    $categoriaController = new CategoriaController();
+    $id = $_GET['id'];
+    $nombre = $_POST['nombre'];
+    $estado = $_POST['estado'];
+    $resultado = $categoriaController->actualizarCategoria($id, $nombre, $estado);
+    echo json_encode($resultado);
+    header("HTTP/1.1 200 OK");
+    exit();
+} else
     if ($endpoint == 'categorias' && isset($_POST['estado'])) {
         require_once 'Controllers/CategoriaController.php';
         $categoriaController = new CategoriaController();
@@ -343,17 +369,8 @@ if ($_POST['METHOD'] == 'PUT') {
         echo json_encode($resultado);
         header("HTTP/1.1 200 OK");
         exit();
-    } else if ($endpoint == 'categorias') {
-        require_once 'Controllers/CategoriaController.php';
-        $categoriaController = new CategoriaController();
-        $id = $_GET['id'];
-        $nombre = $_POST['nombre'];
-        $resultado = $categoriaController->actualizarCategoria($id, $nombre);
-        echo json_encode($resultado);
-        header("HTTP/1.1 200 OK");
-        exit();
+
     }
-}
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
