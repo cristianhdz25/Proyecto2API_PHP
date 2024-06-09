@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost:3307
--- Tiempo de generación: 09-06-2024 a las 06:03:44
--- Versión del servidor: 10.4.27-MariaDB
--- Versión de PHP: 8.0.25
+-- Tiempo de generación: 09-06-2024 a las 06:14:02
+-- Versión del servidor: 10.4.32-MariaDB
+-- Versión de PHP: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -56,6 +56,7 @@ AND _contrasenna LIKE contrasenna$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_get_cupon_detalles` (IN `cuponId` INT)   BEGIN 
     SELECT 
         cupon.id_Cupon,
+        cupon.codigo,
         cupon.imgUrl,
         cupon.nombre AS nombreCupon,
         cupon.descripcion AS descripcionCupon,
@@ -80,8 +81,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_get_cupon_detalles` (IN `cuponId
     LEFT JOIN 
         promocion ON cupon.id_Cupon = promocion.id_Cupon
     WHERE 
-        cupon.id_Cupon = cuponId 
-        AND (promocion.activo = 1 OR promocion.activo IS NULL);
+        cupon.id_Cupon = cuponId;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_get_empresa_by_usuario_contrasenna` (IN `_correo` VARCHAR(255), IN `_contrasenna` VARCHAR(255))   SELECT *
@@ -130,6 +130,7 @@ FROM promocion WHERE id_Cupon = idCupon$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_obtener_cupones_activos` ()   BEGIN
     SELECT 
         cupon.id_Cupon,
+        cupon.codigo,
         cupon.imgUrl,
         cupon.nombre AS nombreCupon,
         cupon.descripcion AS descripcionCupon,
@@ -184,8 +185,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_obtener_cupones_por_categoria` (
     LEFT JOIN 
         promocion ON cupon.id_Cupon = promocion.id_Cupon
     WHERE 
-        categoria.nombre = p_nombreCategoria
-        AND cupon.activo = 1;
+        categoria.id_Categoria = p_idCategoria AND cupon.activo =1;
+  
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_obtener_cupones_por_id_categoria` (IN `p_idCategoria` INT)   BEGIN
