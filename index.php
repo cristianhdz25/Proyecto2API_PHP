@@ -98,8 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         echo json_encode($cupon);
         header("HTTP/1.1 200 OK");
         exit();
-    } else
-        if ($endpoint == 'cupones' && isset($_GET['idComprados'])) {
+    } else if ($endpoint == 'cupones' && isset($_GET['idComprados'])) {
             require_once 'Controllers/CuponController.php';
             $cuponController = new CuponController();
             // Decodificar la cadena JSON recibida del parámetro idComprados
@@ -109,7 +108,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             echo json_encode($cupones);
             header("HTTP/1.1 200 OK");
             exit();
-        }
+    } else  if ($endpoint == 'cupones' && isset($_GET['idDetalles'])) {
+        require_once 'Controllers/CuponController.php';
+        $id = $_GET['idDetalles'];
+        $cuponController = new CuponController();
+        $cupon = $cuponController->obtenerDetallesCupon($id);
+        echo json_encode($cupon);
+        header("HTTP/1.1 200 OK");
+        exit();
+    }
 
     //  else if ($endpoint == 'cupones' ) {
     //     require_once 'Controllers/CuponController.php';
@@ -129,8 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         echo json_encode($categoria);
         header("HTTP/1.1 200 OK");
         exit();
-    } else if
-    ($endpoint == 'categorias' && isset($_GET['page'])) {
+    } else if($endpoint == 'categorias' && isset($_GET['page'])) {
         require_once 'Controllers/CategoriaController.php';
         $page = $_GET['page'];
         $categoriaController = new CategoriaController();
@@ -206,6 +212,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         exit();
     }
 }
+
 
 if ($_POST['METHOD'] == 'POST') {
     if ($endpoint == 'empresas') {
@@ -332,8 +339,7 @@ if ($_POST['METHOD'] == 'PUT') {
         echo json_encode($resultado);
         header("HTTP/1.1 200 OK");
         exit();
-    } else
-        if ($endpoint == 'cupones' && isset($_POST['activo'])) {
+    } else if ($endpoint == 'cupones' && isset($_POST['activo'])) {
             require_once 'Controllers/CuponController.php';
             $cuponController = new CuponController();
             $id = $_GET['id'];
@@ -342,7 +348,7 @@ if ($_POST['METHOD'] == 'PUT') {
             echo json_encode($resultado);
             header("HTTP/1.1 200 OK");
             exit();
-        }
+    }
 
 
     if ($endpoint == 'promociones' && isset($_POST['nombre'])) {
@@ -381,8 +387,7 @@ if ($endpoint == 'categorias') {
     echo json_encode($resultado);
     header("HTTP/1.1 200 OK");
     exit();
-} else
-    if ($endpoint == 'categorias' && isset($_POST['estado'])) {
+} else if ($endpoint == 'categorias' && isset($_POST['estado'])) {
         require_once 'Controllers/CategoriaController.php';
         $categoriaController = new CategoriaController();
         $id = $_GET['id'];
@@ -411,4 +416,8 @@ function sumarUnDia($fecha)
     return $fechaObj->format('Y-m-d');
 }
 
+
+
+
 header("HTTP/1.1 400 Bad Request");
+
