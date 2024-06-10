@@ -67,5 +67,10 @@ class CuponBusiness
         return $this->cuponData->obtenerDetallesCupon($id);
     }
 
+    public function obtenerCuponesComprados($id)
+    {
+        return $this->cuponData->obtenerCuponesComprados($id);
+    }
+
 
 }

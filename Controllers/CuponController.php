@@ -73,6 +73,11 @@ class CuponController
         return $this->cuponBusiness->obtenerDetallesCupon($id);
     }
 
+      public function obtenerCuponesComprados($id)
+    {
+        return $this->cuponBusiness->obtenerCuponesComprados($id);
+    }
+
 
 
 
