@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost:3307
--- Tiempo de generación: 09-06-2024 a las 06:14:02
--- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.0.30
+-- Tiempo de generación: 10-06-2024 a las 04:17:06
+-- Versión del servidor: 10.4.27-MariaDB
+-- Versión de PHP: 8.0.25
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -52,6 +52,55 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_get_admin_by_usuario_contrasenna
 FROM administrador
 WHERE _usuario LIKE usuario
 AND _contrasenna LIKE contrasenna$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_get_cupones_comprados` (IN `cuponesIds` VARCHAR(255))   BEGIN
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE cuponId VARCHAR(255);
+    DECLARE cur CURSOR FOR 
+        SELECT value FROM (SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(cuponesIds, ',', numbers.n), ',', -1) value
+                           FROM (SELECT 1 n UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL 
+                                        SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL 
+                                        SELECT 9 UNION ALL SELECT 10) numbers 
+                           WHERE numbers.n <= CHAR_LENGTH(cuponesIds) - CHAR_LENGTH(REPLACE(cuponesIds, ',', '')) + 1) ids;
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+    CREATE TEMPORARY TABLE IF NOT EXISTS result (
+        id_Cupon INT, 
+        nombre VARCHAR(255), 
+        descripcion VARCHAR(255), 
+        fechaCreacion DATE, 
+        fechaInicio DATE, 
+        fechaVencimiento DATE, 
+        id_Categoria INT, 
+        id_Empresa INT, 
+        imgUrl VARCHAR(255), 
+        porcentaje DOUBLE, 
+        precioBase DOUBLE, 
+        ubicacion VARCHAR(255), 
+        activo TINYINT
+    );
+
+    OPEN cur;
+
+    read_loop: LOOP
+        FETCH cur INTO cuponId;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+
+        INSERT INTO result
+        SELECT 
+            id_Cupon, nombre, descripcion, fechaCreacion, fechaInicio, fechaVencimiento, id_Categoria, id_Empresa, imgUrl, porcentaje, precioBase, ubicacion, activo
+        FROM cupon
+        WHERE id_Cupon = cuponId;
+    END LOOP;
+
+    CLOSE cur;
+
+    SELECT * FROM result;
+    DROP TEMPORARY TABLE result;
+END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_get_cupon_detalles` (IN `cuponId` INT)   BEGIN 
     SELECT 
@@ -263,8 +312,9 @@ CREATE TABLE `categoria` (
 --
 
 INSERT INTO `categoria` (`id_Categoria`, `nombre`, `estado`) VALUES
-(1, 'Comida', 1),
-(2, 'Bebida', 1);
+(1, 'Comida', 0),
+(2, 'Bebida', 1),
+(3, 'Varios', 1);
 
 -- --------------------------------------------------------
 
@@ -294,7 +344,8 @@ CREATE TABLE `cupon` (
 --
 
 INSERT INTO `cupon` (`id_Cupon`, `codigo`, `nombre`, `imgUrl`, `precioBase`, `id_Categoria`, `fechaCreacion`, `fechaInicio`, `fechaVencimiento`, `descripcion`, `activo`, `porcentaje`, `ubicacion`, `id_Empresa`) VALUES
-(1, 'CUP-01', 'Dos Pinos', 'http://localhost/Proyecto2_APIImages_PHP/img/rick-morty.png', 20000, 2, '2024-06-08', '2024-06-09', '2024-06-14', 'Cupon de descuento 2', 1, 0.15, 'Costa Rica', 1);
+(1, 'CUP-01', 'Dos Pinos', 'http://localhost/Proyecto2_APIImages_PHP/img/stretched-1920-1080-1167537 (1).jpg', 20000, 2, '2024-06-09', '2024-06-12', '2024-06-28', 'Cupon de descuento 2', 1, 0.15, 'Costa Rica', 1),
+(2, 'CUP-02', 'Dos Pinos', 'http://localhost/Proyecto2_APIImages_PHP/img/Gojo ;c.png', 20000, 1, '2024-06-09', '2024-06-11', '2024-06-26', 'Descuento', 1, 0.18, 'Costa Rica', 1);
 
 -- --------------------------------------------------------
 
@@ -321,7 +372,7 @@ CREATE TABLE `empresa` (
 --
 
 INSERT INTO `empresa` (`id`, `correo`, `contrasenna`, `nombre`, `direccionFisica`, `cedula`, `fechaCreacion`, `telefono`, `primeraVez`, `activo`, `cedulaTipo`) VALUES
-(1, 'losreyes2504@gmail.com', 'Avenged@7', 'Dos Pinos', 'Juan Viñas', '11-111-114477', '2024-06-03', '7589-5748', 1, 1, 0);
+(1, 'majobm2504@gmail.com', 'Avenged!7', 'Dos Pinos', 'Juan Viñas Costa Rica', '11-255-345789', '2024-06-07', '7281-0534', 0, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -344,7 +395,8 @@ CREATE TABLE `promocion` (
 --
 
 INSERT INTO `promocion` (`id_Promocion`, `nombre`, `porcentaje`, `fechaInicio`, `fechaVencimiento`, `id_Cupon`, `activo`) VALUES
-(1, 'Promocion 1', 0.15, '2024-06-09', '2024-06-13', 1, 1);
+(1, 'Promocion 1', 0.15, '2024-06-13', '2024-06-17', 1, 0),
+(5, 'Cristian', 0.11, '2024-06-14', '2024-06-16', 1, 1);
 
 --
 -- Índices para tablas volcadas
@@ -394,13 +446,13 @@ ALTER TABLE `administrador`
 -- AUTO_INCREMENT de la tabla `categoria`
 --
 ALTER TABLE `categoria`
-  MODIFY `id_Categoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_Categoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `cupon`
 --
 ALTER TABLE `cupon`
-  MODIFY `id_Cupon` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_Cupon` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `empresa`
@@ -412,7 +464,7 @@ ALTER TABLE `empresa`
 -- AUTO_INCREMENT de la tabla `promocion`
 --
 ALTER TABLE `promocion`
-  MODIFY `id_Promocion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_Promocion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

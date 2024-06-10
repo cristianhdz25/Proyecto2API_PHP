@@ -69,7 +69,7 @@ class CuponData
         $resultado = metodoPost($query, $queryAutoIncrement);
         return $resultado;
     }
-    
+
 
     function actualizarEstadoCupon($id, $activo)
     {
@@ -119,17 +119,5 @@ class CuponData
         $resultado = metodoGet($query);
         return $resultado->fetchAll();
     }
-
-    function obtenerCuponesComprados($id)
-    {
-        $query = "CALL sp_get_cupones_comprados(" . $id . ")";
-        $resultado = metodoGet($query);
-        return $resultado->fetchAll();
-    }
-
-
-
-
-
 
 }
