@@ -370,19 +370,8 @@ if ($_POST['METHOD'] == 'PUT') {
         exit();
     }
 
-}
-if ($endpoint == 'categorias') {
-    require_once 'Controllers/CategoriaController.php';
-    $categoriaController = new CategoriaController();
-    $id = $_GET['id'];
-    $nombre = $_POST['nombre'];
-    $estado = $_POST['estado'];
-    $resultado = $categoriaController->actualizarCategoria($id, $nombre, $estado);
-    echo json_encode($resultado);
-    header("HTTP/1.1 200 OK");
-    exit();
-} else
-    if ($endpoint == 'categorias' && isset($_POST['estado'])) {
+
+    if ($endpoint == 'categorias' && isset($_POST['estado']) && !isset($_GET['actualizar'])) {
         require_once 'Controllers/CategoriaController.php';
         $categoriaController = new CategoriaController();
         $id = $_GET['id'];
@@ -392,7 +381,19 @@ if ($endpoint == 'categorias') {
         header("HTTP/1.1 200 OK");
         exit();
 
+    } else if ($endpoint == 'categorias') {
+        require_once 'Controllers/CategoriaController.php';
+        $categoriaController = new CategoriaController();
+        $id = $_GET['id'];
+        $nombre = $_POST['nombre'];
+        $estado = $_POST['estado'];
+        $resultado = $categoriaController->actualizarCategoria($id, $nombre, $estado);
+        echo json_encode($resultado);
+        header("HTTP/1.1 200 OK");
+        exit();
     }
+}
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
