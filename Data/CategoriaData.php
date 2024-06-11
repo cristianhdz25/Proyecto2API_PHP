@@ -6,11 +6,10 @@ class CategoriaData
 
     function obtenerCategorias()
     {
-        $query = "select * from categoria";
+        $query = "CALL sp_obtener_categorias_activas()";
         $resultado = metodoGet($query);
         return $resultado->fetchAll();
     }
-
     function obtenerCategoriaPorId($id)
     {
         $query = "select * from categoria where id='$id'";

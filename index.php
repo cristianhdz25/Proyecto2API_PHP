@@ -98,8 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         echo json_encode($cupon);
         header("HTTP/1.1 200 OK");
         exit();
-    } else
-        if ($endpoint == 'cupones' && isset($_GET['idComprados'])) {
+    } else if ($endpoint == 'cupones' && isset($_GET['idComprados'])) {
             require_once 'Controllers/CuponController.php';
             $cuponController = new CuponController();
             // Decodificar la cadena JSON recibida del parámetro idComprados
@@ -109,7 +108,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             echo json_encode($cupones);
             header("HTTP/1.1 200 OK");
             exit();
-        }
+    }else if ($endpoint == 'cupones' && isset($_GET['idDetalles'])) {
+        require_once 'Controllers/CuponController.php';
+        $idDetalles = $_GET['idDetalles'];
+        $cuponController = new CuponController();
+        $cupon = $cuponController->obtenerDetallesCupon($idDetalles);
+        echo json_encode($cupon);
+        header("HTTP/1.1 200 OK");
+        exit();
+    }
+
+    //	sp_obtener_cupones_por_categoria
 
     //  else if ($endpoint == 'cupones' ) {
     //     require_once 'Controllers/CuponController.php';
