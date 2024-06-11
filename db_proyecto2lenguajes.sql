@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost:3307
--- Tiempo de generación: 10-06-2024 a las 04:17:06
--- Versión del servidor: 10.4.27-MariaDB
--- Versión de PHP: 8.0.25
+-- Tiempo de generación: 11-06-2024 a las 06:21:45
+-- Versión del servidor: 10.4.32-MariaDB
+-- Versión de PHP: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -176,6 +176,16 @@ FROM empresa$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_get_totalPages_promociones_by_cupon` (IN `idCupon` INT)   SELECT CEIL(COUNT(*)/10) AS total_pages
 FROM promocion WHERE id_Cupon = idCupon$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_obtener_categorias_activas` ()   BEGIN
+    SELECT 
+        id_Categoria,
+        nombre
+    FROM 
+        categoria
+    WHERE 
+        estado = 1;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_obtener_cupones_activos` ()   BEGIN
     SELECT 
         cupon.id_Cupon,
@@ -204,7 +214,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_obtener_cupones_activos` ()   BE
     LEFT JOIN 
         promocion ON cupon.id_Cupon = promocion.id_Cupon
     WHERE 
-        cupon.activo = 1;
+        cupon.activo = 1 AND categoria.estado = 1;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_obtener_cupones_por_categoria` (IN `p_nombreCategoria` VARCHAR(255))   BEGIN
@@ -234,8 +244,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_obtener_cupones_por_categoria` (
     LEFT JOIN 
         promocion ON cupon.id_Cupon = promocion.id_Cupon
     WHERE 
-        categoria.id_Categoria = p_idCategoria AND cupon.activo =1;
-  
+        categoria.nombre = p_nombreCategoria AND cupon.activo = 1;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_obtener_cupones_por_id_categoria` (IN `p_idCategoria` INT)   BEGIN
