@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost:3307
--- Tiempo de generación: 11-06-2024 a las 06:21:45
+-- Tiempo de generación: 12-06-2024 a las 07:25:33
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.0.30
 
@@ -102,7 +102,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_get_cupones_comprados` (IN `cupo
     DROP TEMPORARY TABLE result;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_get_cupon_detalles` (IN `cuponId` INT)   BEGIN 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_get_cupon_detalles` (IN `cuponId` INT)   BEGIN
     SELECT 
         cupon.id_Cupon,
         cupon.codigo,
@@ -117,10 +117,10 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_get_cupon_detalles` (IN `cuponId
         cupon.ubicacion AS ubicacionCupon,
         empresa.nombre AS nombreEmpresa,
         categoria.nombre AS nombreCategoria,
-        promocion.nombre AS nombrePromocion,
-        promocion.porcentaje AS porcentajeDescuentoPromocion,
-        promocion.fechaInicio AS fechaInicioPromocion,
-        promocion.fechaVencimiento AS fechaVencimientoPromocion
+        promocion_activa.nombre AS nombrePromocion,
+        promocion_activa.porcentaje AS porcentajeDescuentoPromocion,
+        promocion_activa.fechaInicio AS fechaInicioPromocion,
+        promocion_activa.fechaVencimiento AS fechaVencimientoPromocion
     FROM 
         cupon
     JOIN 
@@ -128,7 +128,19 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_get_cupon_detalles` (IN `cuponId
     JOIN 
         categoria ON cupon.id_Categoria = categoria.id_Categoria
     LEFT JOIN 
-        promocion ON cupon.id_Cupon = promocion.id_Cupon
+        (
+            SELECT 
+                id_Cupon,
+                nombre,
+                porcentaje,
+                fechaInicio,
+                fechaVencimiento
+            FROM 
+                promocion
+            WHERE 
+                activo = 1 AND id_Cupon = cuponId
+           
+        ) AS promocion_activa ON cupon.id_Cupon = promocion_activa.id_Cupon
     WHERE 
         cupon.id_Cupon = cuponId;
 END$$
@@ -186,36 +198,46 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_obtener_categorias_activas` ()  
         estado = 1;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_obtener_cupones_activos` ()   BEGIN
-    SELECT 
-        cupon.id_Cupon,
-        cupon.codigo,
-        cupon.imgUrl,
-        cupon.nombre AS nombreCupon,
-        cupon.descripcion AS descripcionCupon,
-        cupon.fechaCreacion AS fechaCreacionCupon,
-        cupon.fechaInicio AS fechaInicioCupon,
-        cupon.fechaVencimiento AS fechaVencimientoCupon,
-        cupon.porcentaje AS porcentajeDescuentoCupon,
-        cupon.precioBase AS precioBaseCupon,
-        cupon.ubicacion AS ubicacionCupon,
-        empresa.nombre AS nombreEmpresa,
-        categoria.nombre AS nombreCategoria,
-        promocion.nombre AS nombrePromocion,
-        promocion.porcentaje AS porcentajeDescuentoPromocion,
-        promocion.fechaInicio AS fechaInicioPromocion,
-        promocion.fechaVencimiento AS fechaVencimientoPromocion
-    FROM 
-        cupon
-    JOIN 
-        empresa ON cupon.id_Empresa = empresa.id
-    JOIN 
-        categoria ON cupon.id_Categoria = categoria.id_Categoria
-    LEFT JOIN 
-        promocion ON cupon.id_Cupon = promocion.id_Cupon
-    WHERE 
-        cupon.activo = 1 AND categoria.estado = 1;
-END$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_obtener_cupones_activos` ()   SELECT 
+    cupon.id_Cupon,
+    cupon.codigo,
+    cupon.imgUrl,
+    cupon.nombre AS nombreCupon,
+    cupon.descripcion AS descripcionCupon,
+    cupon.fechaCreacion AS fechaCreacionCupon,
+    cupon.fechaInicio AS fechaInicioCupon,
+    cupon.fechaVencimiento AS fechaVencimientoCupon,
+    cupon.porcentaje AS porcentajeDescuentoCupon,
+    cupon.precioBase AS precioBaseCupon,
+    cupon.ubicacion AS ubicacionCupon,
+    empresa.nombre AS nombreEmpresa,
+    categoria.nombre AS nombreCategoria,
+    promocion_activa.nombre AS nombrePromocion,
+    promocion_activa.porcentaje AS porcentajeDescuentoPromocion,
+    promocion_activa.fechaInicio AS fechaInicioPromocion,
+    promocion_activa.fechaVencimiento AS fechaVencimientoPromocion
+FROM 
+    cupon
+JOIN 
+    empresa ON cupon.id_Empresa = empresa.id
+JOIN 
+    categoria ON cupon.id_Categoria = categoria.id_Categoria
+LEFT JOIN 
+    (
+        SELECT 
+            id_Cupon,
+            nombre,
+            porcentaje,
+            fechaInicio,
+            fechaVencimiento
+        FROM 
+            promocion
+        WHERE 
+            promocion.activo = 1
+    ) AS promocion_activa ON cupon.id_Cupon = promocion_activa.id_Cupon
+WHERE 
+    cupon.activo = 1 
+    AND categoria.estado = 1$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_obtener_cupones_por_categoria` (IN `p_nombreCategoria` VARCHAR(255))   BEGIN
     SELECT 
@@ -321,7 +343,7 @@ CREATE TABLE `categoria` (
 --
 
 INSERT INTO `categoria` (`id_Categoria`, `nombre`, `estado`) VALUES
-(1, 'Comida', 0),
+(1, 'Comida', 1),
 (2, 'Bebida', 1),
 (3, 'Varios', 1);
 
@@ -354,7 +376,7 @@ CREATE TABLE `cupon` (
 
 INSERT INTO `cupon` (`id_Cupon`, `codigo`, `nombre`, `imgUrl`, `precioBase`, `id_Categoria`, `fechaCreacion`, `fechaInicio`, `fechaVencimiento`, `descripcion`, `activo`, `porcentaje`, `ubicacion`, `id_Empresa`) VALUES
 (1, 'CUP-01', 'Dos Pinos', 'http://localhost/Proyecto2_APIImages_PHP/img/stretched-1920-1080-1167537 (1).jpg', 20000, 2, '2024-06-09', '2024-06-12', '2024-06-28', 'Cupon de descuento 2', 1, 0.15, 'Costa Rica', 1),
-(2, 'CUP-02', 'Dos Pinos', 'http://localhost/Proyecto2_APIImages_PHP/img/Gojo ;c.png', 20000, 1, '2024-06-09', '2024-06-11', '2024-06-26', 'Descuento', 1, 0.18, 'Costa Rica', 1);
+(2, 'CUP-02', 'Prueba', 'http://localhost/Proyecto2_APIImages_PHP/img/Gojo ;c.png', 20000, 1, '2024-06-09', '2024-06-11', '2024-06-26', 'Descuento', 1, 0.18, 'Costa Rica', 1);
 
 -- --------------------------------------------------------
 
