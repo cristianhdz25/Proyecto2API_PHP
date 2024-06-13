@@ -18,7 +18,7 @@ class EmpresaData
 
     function obtenerEmpresaPorCorreoYContrasenna($correo, $contrasenna)
     {
-        $query = "select * from empresa where correo='$correo' and contrasenna='$contrasenna'";
+        $query = "CALL sp_get_empresa_by_usuario_contrasenna('" . $correo . "', '" . $contrasenna . "')";
         $resultado = metodoGet($query);
         return $resultado->fetchAll();
     }

@@ -9,6 +9,7 @@ header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-W
 $endpoint = $_GET['endpoint'] ?? '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+
     if ($endpoint == 'empresas' && isset($_GET['id'])) {
         require_once 'Controllers/EmpresaController.php';
         $id = $_GET['id'];
@@ -32,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         echo json_encode($empresas);
         header("HTTP/1.1 200 OK");
         exit();
-    } else if ($endpoint == 'empresas' && isset($_GET['correo']) && isset($_GET['$contrasenna'])) {
+    } else if ($endpoint == 'empresas' && isset($_GET['correo']) && isset($_GET['contrasenna'])) {
         require_once 'Controllers/EmpresaController.php';
         $correo = $_GET['correo'];
         $contrasenna = $_GET['contrasenna'];
@@ -41,6 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         echo json_encode($empresa);
         header("HTTP/1.1 200 OK");
         exit();
+
     } else if ($endpoint == 'empresas') {
         require_once 'Controllers/EmpresaController.php';
         $empresaController = new EmpresaController();
@@ -99,16 +101,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         header("HTTP/1.1 200 OK");
         exit();
     } else if ($endpoint == 'cupones' && isset($_GET['idComprados'])) {
-            require_once 'Controllers/CuponController.php';
-            $cuponController = new CuponController();
-            // Decodificar la cadena JSON recibida del parámetro idComprados
-            $idComprados = json_decode($_GET['idComprados'], true);
-            // Luego puedes usar $idComprados como un array PHP normal
-            $cupones = $cuponController->obtenerCuponesComprados($idComprados);
-            echo json_encode($cupones);
-            header("HTTP/1.1 200 OK");
-            exit();
-    }else if ($endpoint == 'cupones' && isset($_GET['idDetalles'])) {
+        require_once 'Controllers/CuponController.php';
+        $cuponController = new CuponController();
+        // Decodificar la cadena JSON recibida del parámetro idComprados
+        $idComprados = json_decode($_GET['idComprados'], true);
+        // Luego puedes usar $idComprados como un array PHP normal
+        $cupones = $cuponController->obtenerCuponesComprados($idComprados);
+        echo json_encode($cupones);
+        header("HTTP/1.1 200 OK");
+        exit();
+    } else if ($endpoint == 'cupones' && isset($_GET['idDetalles'])) {
         require_once 'Controllers/CuponController.php';
         $idDetalles = $_GET['idDetalles'];
         $cuponController = new CuponController();
@@ -215,6 +217,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         exit();
     }
 }
+
+
 
 if ($_POST['METHOD'] == 'POST') {
     if ($endpoint == 'empresas') {
@@ -379,7 +383,7 @@ if ($_POST['METHOD'] == 'PUT') {
         exit();
     }
 
-    if ($endpoint == 'categorias' && isset($_POST['estado']) && isset($_GET['actualizar'])) {
+    if ($endpoint == 'categorias' && isset($_POST['estado']) && !isset($_GET['actualizar'])) {
         require_once 'Controllers/CategoriaController.php';
         $categoriaController = new CategoriaController();
         $id = $_GET['id'];

@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost:3307
--- Tiempo de generación: 12-06-2024 a las 07:25:33
--- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.0.30
+-- Tiempo de generación: 13-06-2024 a las 05:03:10
+-- Versión del servidor: 10.4.27-MariaDB
+-- Versión de PHP: 8.0.25
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -139,7 +139,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_get_cupon_detalles` (IN `cuponId
                 promocion
             WHERE 
                 activo = 1 AND id_Cupon = cuponId
-           
+
         ) AS promocion_activa ON cupon.id_Cupon = promocion_activa.id_Cupon
     WHERE 
         cupon.id_Cupon = cuponId;
@@ -253,10 +253,10 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_obtener_cupones_por_categoria` (
         cupon.ubicacion AS ubicacionCupon,
         empresa.nombre AS nombreEmpresa,
         categoria.nombre AS nombreCategoria,
-        promocion.nombre AS nombrePromocion,
-        promocion.porcentaje AS porcentajeDescuentoPromocion,
-        promocion.fechaInicio AS fechaInicioPromocion,
-        promocion.fechaVencimiento AS fechaVencimientoPromocion
+        promocion_activa.nombre AS nombrePromocion,
+        promocion_activa.porcentaje AS porcentajeDescuentoPromocion,
+        promocion_activa.fechaInicio AS fechaInicioPromocion,
+        promocion_activa.fechaVencimiento AS fechaVencimientoPromocion
     FROM 
         cupon
     JOIN 
@@ -264,7 +264,18 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_obtener_cupones_por_categoria` (
     JOIN 
         categoria ON cupon.id_Categoria = categoria.id_Categoria
     LEFT JOIN 
-        promocion ON cupon.id_Cupon = promocion.id_Cupon
+        (
+            SELECT 
+                id_Cupon,
+                nombre,
+                porcentaje,
+                fechaInicio,
+                fechaVencimiento
+            FROM 
+                promocion
+            WHERE 
+                activo = 1
+        ) AS promocion_activa ON cupon.id_Cupon = promocion_activa.id_Cupon
     WHERE 
         categoria.nombre = p_nombreCategoria AND cupon.activo = 1;
 END$$
@@ -344,8 +355,7 @@ CREATE TABLE `categoria` (
 
 INSERT INTO `categoria` (`id_Categoria`, `nombre`, `estado`) VALUES
 (1, 'Comida', 1),
-(2, 'Bebida', 1),
-(3, 'Varios', 1);
+(2, 'Bebidas', 1);
 
 -- --------------------------------------------------------
 
@@ -375,8 +385,9 @@ CREATE TABLE `cupon` (
 --
 
 INSERT INTO `cupon` (`id_Cupon`, `codigo`, `nombre`, `imgUrl`, `precioBase`, `id_Categoria`, `fechaCreacion`, `fechaInicio`, `fechaVencimiento`, `descripcion`, `activo`, `porcentaje`, `ubicacion`, `id_Empresa`) VALUES
-(1, 'CUP-01', 'Dos Pinos', 'http://localhost/Proyecto2_APIImages_PHP/img/stretched-1920-1080-1167537 (1).jpg', 20000, 2, '2024-06-09', '2024-06-12', '2024-06-28', 'Cupon de descuento 2', 1, 0.15, 'Costa Rica', 1),
-(2, 'CUP-02', 'Prueba', 'http://localhost/Proyecto2_APIImages_PHP/img/Gojo ;c.png', 20000, 1, '2024-06-09', '2024-06-11', '2024-06-26', 'Descuento', 1, 0.18, 'Costa Rica', 1);
+(1, 'CUP-01', 'Cupon 1', 'http://localhost/Proyecto2_APIImages_PHP/img/Gojo ;c.png', 20000, 2, '2024-06-12', '2024-06-13', '2024-06-28', 'Cupon de descuento', 1, 0.23, 'Cartago', 1),
+(2, 'CUP-02', 'Dos Pinos', 'http://localhost/Proyecto2_APIImages_PHP/img/rick-morty.png', 1500, 2, '2024-06-12', '2024-06-15', '2024-06-18', 'Cupon de descuento', 1, 0.11, 'Costa Rica', 2),
+(3, 'CUP-06', 'Coca Cola', 'http://localhost/Proyecto2_APIImages_PHP/img/thumb-1920-1334857.png', 15000, 1, '2024-06-12', '2024-06-13', '2024-06-26', 'Cupon de descuento', 1, 0.12, 'Costa Rica', 2);
 
 -- --------------------------------------------------------
 
@@ -403,7 +414,8 @@ CREATE TABLE `empresa` (
 --
 
 INSERT INTO `empresa` (`id`, `correo`, `contrasenna`, `nombre`, `direccionFisica`, `cedula`, `fechaCreacion`, `telefono`, `primeraVez`, `activo`, `cedulaTipo`) VALUES
-(1, 'majobm2504@gmail.com', 'Avenged!7', 'Dos Pinos', 'Juan Viñas Costa Rica', '11-255-345789', '2024-06-07', '7281-0534', 0, 1, 0);
+(1, 'dospinos2@gmail.com', 'Jr8!F.h1', 'Dos Pinos 2', 'Heredia Costa Rica', '01-2145-2556', '2024-04-23', '8888-8888', 1, 0, 1),
+(2, 'cocacola@gmail.com', 'Deathbat!7', 'Coca Cola', 'Cartago Costa Rica', '11-255-345789', '2024-05-23', '5879-8748', 0, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -426,8 +438,10 @@ CREATE TABLE `promocion` (
 --
 
 INSERT INTO `promocion` (`id_Promocion`, `nombre`, `porcentaje`, `fechaInicio`, `fechaVencimiento`, `id_Cupon`, `activo`) VALUES
-(1, 'Promocion 1', 0.15, '2024-06-13', '2024-06-17', 1, 0),
-(5, 'Cristian', 0.11, '2024-06-14', '2024-06-16', 1, 1);
+(1, 'Promocion 1', 0.11, '2024-06-13', '2024-06-28', 1, 0),
+(2, 'Promocion 1', 0.18, '2024-06-15', '2024-06-18', 2, 1),
+(3, 'Promocion Coca', 0.11, '2024-06-14', '2024-06-19', 3, 0),
+(4, 'Promocion Fanta', 0.04, '2024-06-21', '2024-06-26', 3, 1);
 
 --
 -- Índices para tablas volcadas
@@ -477,25 +491,25 @@ ALTER TABLE `administrador`
 -- AUTO_INCREMENT de la tabla `categoria`
 --
 ALTER TABLE `categoria`
-  MODIFY `id_Categoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_Categoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `cupon`
 --
 ALTER TABLE `cupon`
-  MODIFY `id_Cupon` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_Cupon` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `empresa`
 --
 ALTER TABLE `empresa`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `promocion`
 --
 ALTER TABLE `promocion`
-  MODIFY `id_Promocion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_Promocion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
